@@ -50,6 +50,9 @@ class Resource(object):
         if params is None:
             params = {}
 
+        if self.path is None:
+            raise Exception("Pump fake")
+
         response = requests.get(self.path, params=params, allow_redirects=False)
         if response.status_code != requests.codes.ok: # pylint: disable-msg=E1101
             raise Exception(response.status_code, self.path, response.text)
@@ -89,13 +92,76 @@ class Layer(Resource):
     """ Returns a List of all layers reporting data recently for the given app.
     The default time window for reported layers is 1 day.
 
-    :param app: The app name to list layers.
-    :param since_time: (optional) The start of the time window as a UTC timestamp in milliseconds.
-
     """
 
     PATH = "layers/{app}"
 
     def __call__(self, app, *args, **kwargs):
+        """ TBD.
+
+        :param app: The app name to list layers.
+        :param since_time: (optional) The start of the time window as a UTC timestamp in milliseconds.
+
+        """
         self.PATH = self.PATH.format(app=app)
         return super(Layer, self).__call__(*args, **kwargs)
+
+
+class Latency(object):
+
+    def __init__(self, *args, **kwargs):
+        self.server = Server(*args, **kwargs)
+        self.client = Client(*args, **kwargs)
+
+
+class Server(object):
+
+    def __init__(self, *args, **kwargs):
+        self.series = Series("server", *args, **kwargs)
+        self.summary = None
+        self.by_layer = None
+
+
+class Client(object):
+
+    def __init__(self, *args, **kwargs):
+        self.series = Series("client", *args, **kwargs)
+        self.summary = None
+
+
+class Series(Resource):
+    """ A :class:`Series <Series>` object.
+
+    Usage::
+
+      >>> import traceview
+      >>> api_key = "API KEY HERE"
+      >>> tv = traceview.TraceView(api_key)
+      >>> server_latency = tv.latency.server.series("Default")
+      >>> client_latency = tv.latency.client.series("Default")
+
+    """
+
+    PATH = "latency/{app}/{data_type}/series"
+
+    def __init__(self, data_type, *args, **kwargs):
+        """ Construct a :class:`Series <Series>` object.
+
+        :param data_type: The type of latency data, can be "server" or "client".
+
+        """
+        super(Series, self).__init__(*args, **kwargs)
+        self.data_type = data_type
+
+    def __call__(self, app, *args, **kwargs):
+        """ Call the :class:`Series <Series>` object.
+
+        Return a Dictionary that contains timeseries data of the applications
+        latency and volume, either from a client-side or server-side
+        perspective. Each point is a triple of (timestamp, volume, latency)
+
+        :param app: The app name.
+
+        """
+        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        return super(Series, self).__call__(*args, **kwargs)

@@ -31,3 +31,4 @@ class TraceView(object):
         self.organization = resources.Organization(self.api_key)
         self.apps = resources.App(self.api_key)
         self.layers = resources.Layer(self.api_key)
+        self.latency = resources.Latency(self.api_key)
