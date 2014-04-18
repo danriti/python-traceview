@@ -6,6 +6,7 @@ Tests for TraceView API Library
 
 """
 
+import datetime
 import os
 import unittest
 
@@ -36,6 +37,7 @@ class TestTraceViewAPI(unittest.TestCase):
     def test_organization(self):
         org = self.tv.organization()
         self.assertNotEqual(org, None)
+        self.assertIsInstance(org, dict)
         self.assertTrue('name' in org)
 
     def test_users(self):
@@ -50,12 +52,50 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertIsInstance(apps, list)
         self.assertTrue(len(apps) > 0)
 
+    def test_layers(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+        layers = self.tv.layers(apps[0])
+        self.assertNotEqual(layers, None)
+        self.assertIsInstance(layers, list)
+        self.assertTrue(len(layers) > 0)
+
+    def test_layers_since_time(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        # get a unix timestamp
+        epoch = datetime.datetime(1970, 1, 1)
+        timestamp = (datetime.datetime.now() - epoch).total_seconds()
+
+        layers = self.tv.layers(apps[0], since_time=timestamp)
+        self.assertNotEqual(layers, None)
+        self.assertIsInstance(layers, list)
+        self.assertTrue(len(layers) > 0)
 
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
         r = traceview.resources.Resource(None)
         self.assertIsInstance(r, traceview.resources.Resource)
+
+    def test_build_query_params(self):
+        r = traceview.resources.Resource("ABC123")
+        actual = r.build_query_params({"foo":"bar", "lol":5})
+        expected = {
+            "key": "ABC123",
+            "foo": "bar",
+            "lol": 5
+        }
+        self.assertEqual(actual, expected)
+
+    def test_build_query_params_no_args(self):
+        r = traceview.resources.Resource("ABC123")
+        actual = r.build_query_params()
+        expected = {
+            "key": "ABC123"
+        }
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
