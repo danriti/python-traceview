@@ -12,3 +12,21 @@ __title__ = 'traceview'
 __version__ = '0.1.0'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
+
+
+from .request import Request
+import resources
+
+
+class TraceView(object):
+    """ Provides access to TraceView API resources.
+
+    :param api_key: The TraceView API access key.
+
+    """
+
+    def __init__(self, api_key):
+        self.api_key = api_key
+
+        self.organization = resources.Organization(self.api_key)
+        self.apps = resources.App(self.api_key)
