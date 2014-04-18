@@ -73,6 +73,24 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertIsInstance(layers, list)
         self.assertTrue(len(layers) > 0)
 
+    def test_latency_server(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        server_latency = self.tv.latency.server.series(apps[0])
+        self.assertNotEqual(server_latency, None)
+        self.assertIsInstance(server_latency, dict)
+        self.assertTrue('items' in server_latency)
+
+    def test_latency_client(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        client_latency = self.tv.latency.client.series(apps[0])
+        self.assertNotEqual(client_latency, None)
+        self.assertIsInstance(client_latency, dict)
+        self.assertTrue('items' in client_latency)
+
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
