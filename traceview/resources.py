@@ -7,7 +7,12 @@ This module contains the objects associated with API resources.
 
 """
 
+import logging
+
 import requests
+
+
+log = logging.getLogger(__name__)
 
 
 class Resource(object):
