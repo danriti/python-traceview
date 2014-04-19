@@ -109,6 +109,15 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertIsInstance(client_summary, dict)
         self.assertTrue('average' in client_summary)
 
+    def test_latency_server_by_layer(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        server_by_layer = self.tv.latency.server.by_layer(apps[0])
+        self.assertNotEqual(server_by_layer, None)
+        self.assertIsInstance(server_by_layer, list)
+        self.assertTrue(len(server_by_layer) > 0)
+
 
 class TestResource(unittest.TestCase):
 
