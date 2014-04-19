@@ -5,6 +5,8 @@ traceview.errors
 
 This module contains the objects associated with Errors API resources.
 
+http://dev.appneta.com/docs/api-v2/errors.html
+
 """
 
 from .resource import Resource

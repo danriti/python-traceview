@@ -5,6 +5,8 @@ traceview.latency
 
 This module contains the objects associated with Latency API resources.
 
+http://dev.appneta.com/docs/api-v2/latency.html
+
 """
 
 from .resource import Resource

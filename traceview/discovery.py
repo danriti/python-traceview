@@ -5,6 +5,8 @@ traceview.discovery
 
 This module contains the objects associated with Discovery API resources.
 
+http://dev.appneta.com/docs/api-v2/discovery.html
+
 """
 
 from .resource import Resource
@@ -145,9 +147,6 @@ class Region(Resource):
 class Layer(Resource):
     """ The :class:`Layer <Layer>` object.
 
-    Returns a List of all layers reporting data recently for the given app.
-    The default time window for reported layers is 1 day.
-
     Usage::
 
       >>> import traceview
@@ -159,7 +158,8 @@ class Layer(Resource):
     PATH = "layers/{app}"
 
     def __call__(self, app, *args, **kwargs):
-        """ TBD.
+        """ Returns a List of all layers reporting data recently for the given
+        app. The default time window for reported layers is 1 day.
 
         :param app: The app name to list layers.
         :param since_time: (optional) The start of the time window as a UTC timestamp in milliseconds.
