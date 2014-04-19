@@ -14,7 +14,9 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-import resources
+from .organization import Organization
+from .discovery import App, Layer
+from .latency import Latency
 
 
 class TraceView(object):
@@ -27,7 +29,7 @@ class TraceView(object):
     def __init__(self, api_key):
         self.api_key = api_key
 
-        self.organization = resources.Organization(self.api_key)
-        self.apps = resources.App(self.api_key)
-        self.layers = resources.Layer(self.api_key)
-        self.latency = resources.Latency(self.api_key)
+        self.organization = Organization(self.api_key)
+        self.apps = App(self.api_key)
+        self.layers = Layer(self.api_key)
+        self.latency = Latency(self.api_key)
