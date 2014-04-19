@@ -85,6 +85,18 @@ class TestDiscovery(unittest.TestCase):
         self.assertIsInstance(domains, list)
         self.assertTrue(len(domains) > 0)
 
+    def test_controllers(self):
+        controllers = self.tv.controllers()
+        self.assertNotEqual(controllers, None)
+        self.assertIsInstance(controllers, list)
+        self.assertTrue(len(controllers) > 0)
+
+    def test_actions(self):
+        actions = self.tv.actions()
+        self.assertNotEqual(actions, None)
+        self.assertIsInstance(actions, list)
+        self.assertTrue(len(actions) > 0)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestLatency(unittest.TestCase):
