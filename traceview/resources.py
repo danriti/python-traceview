@@ -123,7 +123,7 @@ class Server(object):
 
     def __init__(self, *args, **kwargs):
         self.series = Series("server", *args, **kwargs)
-        self.summary = None
+        self.summary = Summary("server", *args, **kwargs)
         self.by_layer = None
 
 
@@ -131,7 +131,7 @@ class Client(object):
 
     def __init__(self, *args, **kwargs):
         self.series = Series("client", *args, **kwargs)
-        self.summary = None
+        self.summary = Summary("client", *args, **kwargs)
 
 
 class Series(Resource):
@@ -140,8 +140,7 @@ class Series(Resource):
     Usage::
 
       >>> import traceview
-      >>> api_key = "API KEY HERE"
-      >>> tv = traceview.TraceView(api_key)
+      >>> tv = traceview.TraceView("API KEY HERE")
       >>> server_series = tv.latency.server.series("Default")
       >>> client_series = tv.latency.client.series("Default")
 
@@ -170,3 +169,39 @@ class Series(Resource):
         """
         self.PATH = self.PATH.format(app=app, data_type=self.data_type)
         return super(Series, self).__call__(*args, **kwargs)
+
+
+class Summary(Resource):
+    """ A :class:`Summary <Summary>` object.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> server_summary = tv.latency.server.summary("Default")
+      >>> client_summary = tv.latency.client.summary("Default")
+
+    """
+
+    PATH = "latency/{app}/{data_type}/summary"
+
+    def __init__(self, data_type, *args, **kwargs):
+        """ Construct a :class:`Series <Series>` object.
+
+        :param data_type: The type of latency data, can be "server" or "client".
+
+        """
+        super(Summary, self).__init__(*args, **kwargs)
+        self.data_type = data_type
+
+    def __call__(self, app, *args, **kwargs):
+        """ Call the :class:`Summary <Summary>` object.
+
+        Returns a Dictionary containing the summary of the latency and volume
+        traced, for either the client side or the server side.
+
+        :param app: The app name.
+
+        """
+        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        return super(Summary, self).__call__(*args, **kwargs)
