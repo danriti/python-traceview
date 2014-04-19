@@ -14,7 +14,6 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-from .request import Request
 import resources
 
 

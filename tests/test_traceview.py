@@ -11,7 +11,6 @@ import os
 import unittest
 
 import traceview
-import traceview.request
 import traceview.resources
 
 
