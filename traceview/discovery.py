@@ -26,6 +26,22 @@ class App(Resource):
     PATH = "apps"
 
 
+class Domain(Resource):
+    """ The :class:`Domains <Domains>` object.
+
+    Returns a List of all domains traced.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> apps = tv.domains()
+
+    """
+
+    PATH = "domains"
+
+
 class Layer(Resource):
     """ The :class:`Layer <Layer>` object.
 

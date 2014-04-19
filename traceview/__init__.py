@@ -15,7 +15,7 @@ __license__ = 'MIT'
 
 
 from .organization import Organization
-from .discovery import App, Layer
+from .discovery import App, Domain, Layer
 from .latency import Latency
 
 
@@ -29,7 +29,8 @@ class TraceView(object):
     def __init__(self, api_key):
         self.api_key = api_key
 
-        self.organization = Organization(self.api_key)
         self.apps = App(self.api_key)
-        self.layers = Layer(self.api_key)
+        self.domains = Domain(self.api_key)
         self.latency = Latency(self.api_key)
+        self.layers = Layer(self.api_key)
+        self.organization = Organization(self.api_key)
