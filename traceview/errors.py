@@ -45,5 +45,5 @@ class Rate(Resource):
         :param app: The app name.
 
         """
-        self.PATH = self.PATH.format(app=app)
+        self.path = self.PATH.format(app=app)
         return super(Rate, self).__call__(*args, **kwargs)

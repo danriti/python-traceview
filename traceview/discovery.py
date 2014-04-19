@@ -165,5 +165,5 @@ class Layer(Resource):
         :param since_time: (optional) The start of the time window as a UTC timestamp in milliseconds.
 
         """
-        self.PATH = self.PATH.format(app=app)
+        self.path = self.PATH.format(app=app)
         return super(Layer, self).__call__(*args, **kwargs)

@@ -74,7 +74,7 @@ class Series(Resource):
         :param app: The app name.
 
         """
-        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        self.path = self.PATH.format(app=app, data_type=self.data_type)
         return super(Series, self).__call__(*args, **kwargs)
 
 
@@ -110,7 +110,7 @@ class Summary(Resource):
         :param app: The app name.
 
         """
-        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        self.path = self.PATH.format(app=app, data_type=self.data_type)
         return super(Summary, self).__call__(*args, **kwargs)
 
 
@@ -146,5 +146,5 @@ class ByLayer(Resource):
         :param app: The app name.
 
         """
-        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        self.path = self.PATH.format(app=app, data_type=self.data_type)
         return super(ByLayer, self).__call__(*args, **kwargs)
