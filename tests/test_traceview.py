@@ -73,7 +73,7 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertIsInstance(layers, list)
         self.assertTrue(len(layers) > 0)
 
-    def test_latency_server(self):
+    def test_latency_server_series(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
@@ -82,7 +82,7 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertIsInstance(server_latency, dict)
         self.assertTrue('items' in server_latency)
 
-    def test_latency_client(self):
+    def test_latency_client_series(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
@@ -90,6 +90,25 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertNotEqual(client_latency, None)
         self.assertIsInstance(client_latency, dict)
         self.assertTrue('items' in client_latency)
+
+    def test_latency_server_summary(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        server_summary = self.tv.latency.server.summary(apps[0])
+        self.assertNotEqual(server_summary, None)
+        self.assertIsInstance(server_summary, dict)
+        self.assertTrue('average' in server_summary)
+
+    def test_latency_client_summary(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        client_summary = self.tv.latency.client.summary(apps[0])
+        self.assertNotEqual(client_summary, None)
+        self.assertIsInstance(client_summary, dict)
+        self.assertTrue('average' in client_summary)
+
 
 class TestResource(unittest.TestCase):
 
