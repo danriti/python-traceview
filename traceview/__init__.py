@@ -17,11 +17,14 @@ __license__ = 'MIT'
 from .organization import Organization
 from .discovery import Action, App, Browser, Controller, Domain, Host
 from .discovery import Layer, Metric, Region
+from .errors import Error
 from .latency import Latency
 
 
 class TraceView(object):
-    """ Provides access to TraceView API resources.
+    """ The :class:`TraceView <TraceView>` object.
+
+    Provides access to TraceView API resources.
 
     :param api_key: The TraceView API access key.
 
@@ -35,6 +38,7 @@ class TraceView(object):
         self.browsers = Browser(self.api_key)
         self.controllers = Controller(self.api_key)
         self.domains = Domain(self.api_key)
+        self.errors = Error(self.api_key)
         self.hosts = Host(self.api_key)
         self.latency = Latency(self.api_key)
         self.layers = Layer(self.api_key)
