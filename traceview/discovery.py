@@ -90,6 +90,38 @@ class Browser(Resource):
     PATH = "browsers"
 
 
+class Host(Resource):
+    """ The :class:`Host <Host>` object.
+
+    Return a List of all hosts traced.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> hosts = tv.hosts()
+
+    """
+
+    PATH = "hosts"
+
+
+class Metric(Resource):
+    """ The :class:`Metric <Metric>` object.
+
+    Return a List of all available host metrics being collected.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> metrics = tv.metrics()
+
+    """
+
+    PATH = "metrics"
+
+
 class Layer(Resource):
     """ The :class:`Layer <Layer>` object.
 
