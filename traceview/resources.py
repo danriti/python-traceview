@@ -142,8 +142,8 @@ class Series(Resource):
       >>> import traceview
       >>> api_key = "API KEY HERE"
       >>> tv = traceview.TraceView(api_key)
-      >>> server_latency = tv.latency.server.series("Default")
-      >>> client_latency = tv.latency.client.series("Default")
+      >>> server_series = tv.latency.server.series("Default")
+      >>> client_series = tv.latency.client.series("Default")
 
     """
 
