@@ -16,7 +16,7 @@ __license__ = 'MIT'
 
 from .organization import Organization
 from .discovery import Action, App, Browser, Controller, Domain, Host
-from .discovery import Layer, Metric
+from .discovery import Layer, Metric, Region
 from .latency import Latency
 
 
@@ -40,3 +40,4 @@ class TraceView(object):
         self.layers = Layer(self.api_key)
         self.metrics = Metric(self.api_key)
         self.organization = Organization(self.api_key)
+        self.regions = Region(self.api_key)

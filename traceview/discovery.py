@@ -122,6 +122,26 @@ class Metric(Resource):
     PATH = "metrics"
 
 
+class Region(Resource):
+    """ The :class:`Region <Region>` object.
+
+    Returns a list of region codes, seen in RUM.
+
+    Regions codes are ISO 3166-1 and ISO 3166-2 codes for all regions collected
+    in RUM. Currently, country codes (ISO-3166-1) are available worldwide, and
+    state codes (ISO-3166-2) are available in the US and Canada.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> regions = tv.regions()
+
+    """
+
+    PATH = "regions"
+
+
 class Layer(Resource):
     """ The :class:`Layer <Layer>` object.
 

@@ -109,6 +109,18 @@ class TestDiscovery(unittest.TestCase):
         self.assertIsInstance(hosts, list)
         self.assertTrue(len(hosts) > 0)
 
+    def test_metrics(self):
+        metrics = self.tv.metrics()
+        self.assertNotEqual(metrics, None)
+        self.assertIsInstance(metrics, list)
+        self.assertTrue(len(metrics) > 0)
+
+    def test_regions(self):
+        regions = self.tv.regions()
+        self.assertNotEqual(regions, None)
+        self.assertIsInstance(regions, list)
+        self.assertTrue(len(regions) > 0)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestLatency(unittest.TestCase):
