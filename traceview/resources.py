@@ -58,6 +58,7 @@ class Resource(object):
         if self.path is None:
             raise Exception("Pump fake")
 
+        log.debug(self.path, params)
         response = requests.get(self.path, params=params, allow_redirects=False)
         if response.status_code != requests.codes.ok: # pylint: disable-msg=E1101
             raise Exception(response.status_code, self.path, response.text)
@@ -124,7 +125,7 @@ class Server(object):
     def __init__(self, *args, **kwargs):
         self.series = Series("server", *args, **kwargs)
         self.summary = Summary("server", *args, **kwargs)
-        self.by_layer = None
+        self.by_layer = ByLayer("server", *args, **kwargs)
 
 
 class Client(object):
@@ -186,7 +187,7 @@ class Summary(Resource):
     PATH = "latency/{app}/{data_type}/summary"
 
     def __init__(self, data_type, *args, **kwargs):
-        """ Construct a :class:`Series <Series>` object.
+        """ Construct a :class:`Summary <Summary>` object.
 
         :param data_type: The type of latency data, can be "server" or "client".
 
@@ -205,3 +206,39 @@ class Summary(Resource):
         """
         self.PATH = self.PATH.format(app=app, data_type=self.data_type)
         return super(Summary, self).__call__(*args, **kwargs)
+
+
+class ByLayer(Resource):
+    """ A :class:`ByLayer <ByLayer>` object.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> server_summary = tv.latency.server.by_layer("Default")
+      >>> client_summary = tv.latency.client.by_layer("Default")
+
+    """
+
+    PATH = "latency/{app}/{data_type}/by-layer"
+
+    def __init__(self, data_type, *args, **kwargs):
+        """ Construct a :class:`ByLayer <ByLayer>` object.
+
+        :param data_type: The type of latency data, can be "server" or "client".
+
+        """
+        super(ByLayer, self).__init__(*args, **kwargs)
+        self.data_type = data_type
+
+    def __call__(self, app, *args, **kwargs):
+        """ Call the :class:`ByLayer <ByLayer>` object.
+
+        Returns a Dictionary containing the summary of the latency and volume
+        traced, for either the client side or the server side.
+
+        :param app: The app name.
+
+        """
+        self.PATH = self.PATH.format(app=app, data_type=self.data_type)
+        return super(ByLayer, self).__call__(*args, **kwargs)
