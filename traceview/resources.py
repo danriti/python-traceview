@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 
 class Resource(object):
-    """ The Resource object.
+    """ The :class:`Resource <Resource>` object.
 
     """
 
@@ -67,7 +67,15 @@ class Resource(object):
 
 
 class User(Resource):
-    """ Returns a List of user data for your organization.
+    """ The :class:`User <User>` object.
+
+    Returns a List of user data for your organization.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> tv.organization.users()
 
     """
 
@@ -75,7 +83,15 @@ class User(Resource):
 
 
 class Organization(Resource):
-    """ Returns a Dictionary of organization data.
+    """ The :class:`Organization <Organization>` object.
+
+    Returns a Dictionary of organization data.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> tv.organization()
 
     """
 
@@ -87,7 +103,15 @@ class Organization(Resource):
 
 
 class App(Resource):
-    """ Returns a List of all available apps.
+    """ The :class:`App <App>` object.
+
+    Returns a List of all available apps.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> apps = tv.apps()
 
     """
 
@@ -95,8 +119,16 @@ class App(Resource):
 
 
 class Layer(Resource):
-    """ Returns a List of all layers reporting data recently for the given app.
+    """ The :class:`Layer <Layer>` object.
+
+    Returns a List of all layers reporting data recently for the given app.
     The default time window for reported layers is 1 day.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> layers = tv.layers("Default")
 
     """
 
@@ -114,6 +146,9 @@ class Layer(Resource):
 
 
 class Latency(object):
+    """ Object used to structurally organize the object call chain for Latency.
+
+    """
 
     def __init__(self, *args, **kwargs):
         self.server = Server(*args, **kwargs)
@@ -121,6 +156,9 @@ class Latency(object):
 
 
 class Server(object):
+    """ Object used to structurally organize the object call chain for Server.
+
+    """
 
     def __init__(self, *args, **kwargs):
         self.series = Series("server", *args, **kwargs)
@@ -129,6 +167,9 @@ class Server(object):
 
 
 class Client(object):
+    """ Object used to structurally organize the object call chain for Server.
+
+    """
 
     def __init__(self, *args, **kwargs):
         self.series = Series("client", *args, **kwargs)
