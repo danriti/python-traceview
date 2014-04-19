@@ -28,7 +28,7 @@ class TestTraceView(unittest.TestCase):
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
-class TestTraceViewAPI(unittest.TestCase):
+class TestOrganization(unittest.TestCase):
 
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
@@ -44,6 +44,13 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertNotEqual(users, None)
         self.assertIsInstance(users, list)
         self.assertTrue(len(users) > 0)
+
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestDiscovery(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
 
     def test_apps(self):
         apps = self.tv.apps()
@@ -71,6 +78,19 @@ class TestTraceViewAPI(unittest.TestCase):
         self.assertNotEqual(layers, None)
         self.assertIsInstance(layers, list)
         self.assertTrue(len(layers) > 0)
+
+    def test_domains(self):
+        domains = self.tv.domains()
+        self.assertNotEqual(domains, None)
+        self.assertIsInstance(domains, list)
+        self.assertTrue(len(domains) > 0)
+
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestLatency(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
 
     def test_latency_server_series(self):
         apps = self.tv.apps()
