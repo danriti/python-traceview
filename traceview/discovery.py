@@ -47,8 +47,6 @@ class Controller(Resource):
 
     Returns a List of all controllers traced.
 
-    http://dev.appneta.com/docs/api-v2/discovery.html#controller-actions
-
     Usage::
 
       >>> import traceview
@@ -65,8 +63,6 @@ class Action(Resource):
 
     Returns a List of all actions traced.
 
-    http://dev.appneta.com/docs/api-v2/discovery.html#controller-actions
-
     Usage::
 
       >>> import traceview
@@ -76,6 +72,22 @@ class Action(Resource):
     """
 
     PATH = "actions"
+
+
+class Browser(Resource):
+    """ The :class:`Browser <Browser>` object.
+
+    Returns a List of browser families, seen in RUM.
+
+    Usage::
+
+      >>> import traceview
+      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> browsers = tv.browsers()
+
+    """
+
+    PATH = "browsers"
 
 
 class Layer(Resource):

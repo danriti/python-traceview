@@ -97,6 +97,12 @@ class TestDiscovery(unittest.TestCase):
         self.assertIsInstance(actions, list)
         self.assertTrue(len(actions) > 0)
 
+    def test_browsers(self):
+        browsers = self.tv.browsers()
+        self.assertNotEqual(browsers, None)
+        self.assertIsInstance(browsers, list)
+        self.assertTrue(len(browsers) > 0)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestLatency(unittest.TestCase):
