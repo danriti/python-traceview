@@ -1,1 +1,4 @@
 *.pyc
+build/
+dist/
+python_traceview.egg-info/
