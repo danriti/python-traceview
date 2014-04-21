@@ -7,7 +7,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-packages = []
+packages = ['traceview']
 
 requires = ['requests==2.2.1']
 
