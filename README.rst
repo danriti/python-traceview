@@ -14,7 +14,8 @@ To install python-traceview, simply:
 
     $ pip install python-traceview
 
-## Usage
+Usage
+-----
 
 .. code-block:: python
 
