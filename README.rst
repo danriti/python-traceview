@@ -23,3 +23,7 @@ Usage
     >>> tv = traceview.TraceView("API KEY HERE")
     >>> tv.apps()
     [u'Default', u'pyramid_web_app']
+    >>> tv.latency.server.summary(app='Default')
+    {u'count': 2746.0, u'average': 213911.87181354698, u'latest': 35209.87654320987}
+    >>> tv.latency.client.summary(app='Default', time_window='week')
+    {u'count': 70546.0, u'average': 10385458.60856746, u'latest': 138626.26463003372}
