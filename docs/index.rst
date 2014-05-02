@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 python-traceview
-=====================================
+================
 
 Release v\ |version|.
 
@@ -21,8 +21,8 @@ To install python-traceview, simply:
 
     $ pip install python-traceview
 
-Usage
------
+Quick Start
+-----------
 
 .. code-block:: python
 
@@ -34,3 +34,37 @@ Usage
     {u'count': 2746.0, u'average': 213911.87181354698, u'latest': 35209.87654320987}
     >>> tv.latency.client.summary(app='Default', time_window='week')
     {u'count': 70546.0, u'average': 10385458.60856746, u'latest': 138626.26463003372}
+
+API Documentation
+-----------------
+
+.. autoclass:: traceview.TraceView
+   :members:
+
+Discovery
+~~~~~~~~~
+
+.. autoclass:: traceview.discovery.Action
+.. autoclass:: traceview.discovery.App
+.. autoclass:: traceview.discovery.Browser
+.. autoclass:: traceview.discovery.Controller
+.. autoclass:: traceview.discovery.Domain
+.. autoclass:: traceview.discovery.Host
+.. autoclass:: traceview.discovery.Layer
+.. autoclass:: traceview.discovery.Metric
+.. autoclass:: traceview.discovery.Region
+
+Errors
+~~~~~~
+.. autoclass:: traceview.errors.Rate
+
+Latency
+~~~~~~~
+.. autoclass:: traceview.latency.Series
+.. autoclass:: traceview.latency.Summary
+.. autoclass:: traceview.latency.ByLayer
+
+Organization
+~~~~~~~~~~~~
+.. autoclass:: traceview.organization.Organization
+.. autoclass:: traceview.organization.User
