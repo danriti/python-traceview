@@ -51,9 +51,9 @@ class TraceView(object):
         self._regions = Region(self.api_key)
         self._users = User(self.api_key)
 
-        #: client
+        #: Get :py:class:`Client <traceview.latency.Client>` latency information.
         self.client = Client(self.api_key)
-        #: server
+        #: Get :py:class:`Server <traceview.latency.Server>` latency information.
         self.server = Server(self.api_key)
 
     def actions(self):
