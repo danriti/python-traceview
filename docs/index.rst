@@ -40,3 +40,11 @@ API Documentation
 
 .. autoclass:: traceview.TraceView
    :members:
+
+Latency
+~~~~~~~
+
+.. autoclass:: traceview.latency.Client
+   :members:
+.. autoclass:: traceview.latency.Server
+   :members:
