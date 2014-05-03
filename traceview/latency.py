@@ -12,25 +12,47 @@ http://dev.appneta.com/docs/api-v2/latency.html
 from .resource import Resource
 
 
-class Latency(object):
-    """ Object used to structurally organize the object call chain for Latency.
-
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.server = Server(*args, **kwargs)
-        self.client = Client(*args, **kwargs)
-
-
 class Server(object):
     """ Object used to structurally organize the object call chain for Server.
 
     """
 
     def __init__(self, *args, **kwargs):
-        self.series = Series("server", *args, **kwargs)
-        self.summary = Summary("server", *args, **kwargs)
-        self.by_layer = ByLayer("server", *args, **kwargs)
+        self._series = Series("server", *args, **kwargs)
+        self._summary = Summary("server", *args, **kwargs)
+        self._by_layer = ByLayer("server", *args, **kwargs)
+
+    def latency_series(self, app, *args, **kwargs):
+        """ Get a timeseries line of the applications latency and volume.
+
+        Each timeseries point is a triple of (timestamp, volume, latency).
+
+        :param str app: The app name.
+        :return: timeseries data of the application latency and volume
+        :rtype: dict
+
+        """
+        return self._series.get(app, *args, **kwargs)
+
+    def latency_summary(self, app, *args, **kwargs):
+        """ Get a summary of the latency and volume traced.
+
+        :param str app: The app name.
+        :return: timeseries data of the application latency and volume
+        :rtype: dict
+
+        """
+        return self._summary.get(app, *args, **kwargs)
+
+    def latency_by_layer(self, app, *args, **kwargs):
+        """ Get timeseries data grouped by application layers.
+
+        :param str app: The app name.
+        :return: timeseries data of the application latency and volume
+        :rtype: dict
+
+        """
+        return self._by_layer.get(app, *args, **kwargs)
 
 
 class Client(object):
@@ -39,21 +61,17 @@ class Client(object):
     """
 
     def __init__(self, *args, **kwargs):
-        self.series = Series("client", *args, **kwargs)
-        self.summary = Summary("client", *args, **kwargs)
+        self._series = Series("client", *args, **kwargs)
+        self._summary = Summary("client", *args, **kwargs)
+
+    def latency_series(self, app, *args, **kwargs):
+        return self._series.get(app, *args, **kwargs)
+
+    def latency_summary(self, app, *args, **kwargs):
+        return self._summary.get(app, *args, **kwargs)
 
 
 class Series(Resource):
-    """ A :class:`Series <Series>` object.
-
-    Usage::
-
-      >>> import traceview
-      >>> tv = traceview.TraceView("API KEY HERE")
-      >>> server_series = tv.latency.server.series("Default")
-      >>> client_series = tv.latency.client.series("Default")
-
-    """
 
     PATH = "latency/{app}/{data_type}/series"
 
@@ -66,7 +84,7 @@ class Series(Resource):
         super(Series, self).__init__(*args, **kwargs)
         self.data_type = data_type
 
-    def __call__(self, app, *args, **kwargs):
+    def get(self, app, *args, **kwargs):
         """ Call the :class:`Series <Series>` object.
 
         Return a Dictionary that contains timeseries data of the applications
@@ -77,20 +95,10 @@ class Series(Resource):
 
         """
         self.path = self.PATH.format(app=app, data_type=self.data_type)
-        return super(Series, self).__call__(*args, **kwargs)
+        return super(Series, self).get(*args, **kwargs)
 
 
 class Summary(Resource):
-    """ A :class:`Summary <Summary>` object.
-
-    Usage::
-
-      >>> import traceview
-      >>> tv = traceview.TraceView("API KEY HERE")
-      >>> server_summary = tv.latency.server.summary("Default")
-      >>> client_summary = tv.latency.client.summary("Default")
-
-    """
 
     PATH = "latency/{app}/{data_type}/summary"
 
@@ -103,7 +111,7 @@ class Summary(Resource):
         super(Summary, self).__init__(*args, **kwargs)
         self.data_type = data_type
 
-    def __call__(self, app, *args, **kwargs):
+    def get(self, app, *args, **kwargs):
         """ Call the :class:`Summary <Summary>` object.
 
         Returns a Dictionary containing the summary of the latency and volume
@@ -113,20 +121,10 @@ class Summary(Resource):
 
         """
         self.path = self.PATH.format(app=app, data_type=self.data_type)
-        return super(Summary, self).__call__(*args, **kwargs)
+        return super(Summary, self).get(*args, **kwargs)
 
 
 class ByLayer(Resource):
-    """ A :class:`ByLayer <ByLayer>` object.
-
-    Usage::
-
-      >>> import traceview
-      >>> tv = traceview.TraceView("API KEY HERE")
-      >>> server_summary = tv.latency.server.by_layer("Default")
-      >>> client_summary = tv.latency.client.by_layer("Default")
-
-    """
 
     PATH = "latency/{app}/{data_type}/by-layer"
 
@@ -139,7 +137,7 @@ class ByLayer(Resource):
         super(ByLayer, self).__init__(*args, **kwargs)
         self.data_type = data_type
 
-    def __call__(self, app, *args, **kwargs):
+    def get(self, app, *args, **kwargs):
         """ Call the :class:`ByLayer <ByLayer>` object.
 
         Returns a Dictionary containing the summary of the latency and volume
@@ -149,4 +147,4 @@ class ByLayer(Resource):
 
         """
         self.path = self.PATH.format(app=app, data_type=self.data_type)
-        return super(ByLayer, self).__call__(*args, **kwargs)
+        return super(ByLayer, self).get(*args, **kwargs)

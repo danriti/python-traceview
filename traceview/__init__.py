@@ -18,7 +18,7 @@ from .organization import Organization, User
 from .discovery import Action, App, Browser, Controller, Domain, Host
 from .discovery import Layer, Metric, Region
 from .errors import Rate
-from .latency import Latency
+from .latency import Client, Server
 
 
 class TraceView(object):
@@ -45,18 +45,16 @@ class TraceView(object):
         self._domains = Domain(self.api_key)
         self._error_rates = Rate(self.api_key)
         self._hosts = Host(self.api_key)
-
-        #: Get server or client latency information. For more details, check out
-        #: :py:class:`Series <traceview.latency.Series>`,
-        #: :py:class:`Summary <traceview.latency.Summary>`, and
-        #: :py:class:`ByLayer <traceview.latency.ByLayer>`.
-        self.latency = Latency(self.api_key)
-
         self._layers = Layer(self.api_key)
         self._metrics = Metric(self.api_key)
         self._organization = Organization(self.api_key)
         self._regions = Region(self.api_key)
         self._users = User(self.api_key)
+
+        #: client
+        self.client = Client(self.api_key)
+        #: server
+        self.server = Server(self.api_key)
 
     def actions(self):
         """ Get all actions that have been traced.
