@@ -45,8 +45,8 @@ class Server(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.server.latency_series("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.server.latency_series('Default')
           {u'fields': u'timestamp,volume,avg_latency', u'items': [[1399089120.0, 27.0, 226074.07407407407], ...]}
 
         """
@@ -69,8 +69,8 @@ class Server(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.server.latency_summary("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.server.latency_summary('Default')
           {u'count': 2402.0, u'average': 271437.13572023314, u'latest': 19530.61224489796}
 
         """
@@ -94,9 +94,9 @@ class Server(object):
 
           >>> import pprint
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.server.latency_by_layer("Default")
-          >>> pprint.pprint(tv.server.latency_by_layer("Default"))
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.server.latency_by_layer('Default')
+          >>> pprint.pprint(tv.server.latency_by_layer('Default'))
           [{u'layer': u'PHP',
             u'timeseries': {u'fields': u'timestamp,volume,avg_latency',
                             u'items': [[1399089540.0, 10, 0], ...]}},
@@ -142,8 +142,8 @@ class Client(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.client.latency_series("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.client.latency_series('Default')
           {u'fields': u'timestamp,volume,avg_latency', u'items': [[1399090230.0, 0, None], ...]}
 
         """
@@ -168,8 +168,8 @@ class Client(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.client.latency_summary("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.client.latency_summary('Default')
           {u'count': 93.0, u'average': 14503082.720430108, u'latest': None}
 
 

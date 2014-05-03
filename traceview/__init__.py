@@ -31,7 +31,7 @@ class TraceView(object):
     Usage::
 
       >>> import traceview
-      >>> tv = traceview.TraceView("API KEY HERE")
+      >>> tv = traceview.TraceView('API KEY HERE')
 
     """
 
@@ -65,7 +65,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.actions()
           [u'admin', u'products', u'blog', u'settings', u'logout']
 
@@ -81,7 +81,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.apps()
           [u'Default', u'flask_app']
 
@@ -97,7 +97,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.browsers()
           [u'Chrome', u'Firefox', u'Links', u'Safari', u'Wii']
 
@@ -113,7 +113,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.controllers()
           [u'admin', u'products', u'blog', u'settings', u'logout']
 
@@ -129,7 +129,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.domains()
           [u'example.com', u'www.example.com', u'mail.example.com']
 
@@ -150,8 +150,8 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.error_rates("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.error_rates('Default')
           {u'fields': u'timestamp,error_rate', u'items': [[1399082880.0, 0], [1399082910.0, 0], ...]}
 
         """
@@ -166,7 +166,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.hosts()
           [u'db.example.com', u'api.example.com', u'www.example.com', u'mail.example.com']
 
@@ -186,8 +186,8 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
-          >>> tv.layers("Default")
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.layers('Default')
           [u'PHP', u'cURL', u'lighttpd', u'php_mysql', u'php_mysqli']
 
         """
@@ -202,7 +202,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.metrics()
           [u'cpu_user_frac:all', u'load', u'mem_apps', u'mem_cached', u'mem_swap', u'mem_totalused', ... ]
 
@@ -218,7 +218,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.organization()
           {u'fullname': u'the example organization', u'name': u'example'}
 
@@ -238,7 +238,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.regions()
           [u'CA', u'CA-BC', u'MX', u'RU', u'US', u'US-RI', ...]
 
@@ -254,7 +254,7 @@ class TraceView(object):
         Usage::
 
           >>> import traceview
-          >>> tv = traceview.TraceView("API KEY HERE")
+          >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.organization.users()
           [{u'admin': True, u'name': u'Jane Doe', u'email': u'jdoe@example.com'}, { ... }]
 
