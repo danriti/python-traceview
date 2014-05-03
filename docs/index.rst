@@ -47,10 +47,11 @@ account::
 Nice, right? We can also get a server side latency summary for the ``Default``
 application::
 
-    >>> tv.server.latency_summary(app='Default')
+    >>> tv.server.latency_summary(app='Default', time_window='hour')
     {u'count': 2746.0, u'average': 213911.87181354698, u'latest': 35209.87654320987}
 
-That’s all well and good, but it’s also only the start of what information you
+TraceView has traced 2746 requests in the last hour, with an average latency of
+213ms. That’s all well and good, but it’s also only the start of what information you
 can get from TraceView.
 
 API Documentation
