@@ -11,7 +11,7 @@ import os
 import unittest
 
 import traceview
-import traceview.resources
+import traceview.resource
 
 
 TV_API_KEY = os.environ.get("TV_API_KEY", None)
@@ -193,11 +193,11 @@ class TestLatency(unittest.TestCase):
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
-        r = traceview.resources.Resource(None)
-        self.assertIsInstance(r, traceview.resources.Resource)
+        r = traceview.resource.Resource(None)
+        self.assertIsInstance(r, traceview.resource.Resource)
 
     def test_build_query_params(self):
-        r = traceview.resources.Resource("ABC123")
+        r = traceview.resource.Resource("ABC123")
         actual = r.build_query_params({"foo":"bar", "lol":5})
         expected = {
             "key": "ABC123",
@@ -207,7 +207,7 @@ class TestResource(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_build_query_params_no_args(self):
-        r = traceview.resources.Resource("ABC123")
+        r = traceview.resource.Resource("ABC123")
         actual = r.build_query_params()
         expected = {
             "key": "ABC123"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-traceview.errors
+traceview.error
 
 This module contains the objects associated with Errors API resources.
 

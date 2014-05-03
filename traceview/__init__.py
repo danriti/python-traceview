@@ -17,7 +17,7 @@ __license__ = 'MIT'
 from .organization import Organization, User
 from .discovery import Action, App, Browser, Controller, Domain, Host
 from .discovery import Layer, Metric, Region
-from .errors import Rate
+from .error import Rate
 from .latency import Client, Server
 
 
