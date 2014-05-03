@@ -49,14 +49,13 @@ class Resource(object):
         params.update({"key": self.api_key})
         return params
 
-    def get(self, params=None):
+    def get(self, *args, **kwargs):
         """ Perform a HTTP GET request for the given Resource.
 
-        :params: (optional) Dictionary of query parameters.
+        :param dict kwargs: (optional) Query parameters for the request.
 
         """
-        if params is None:
-            params = {}
+        params = self.build_query_params(kwargs)
 
         if self.path is None:
             raise Exception("Pump fake")
