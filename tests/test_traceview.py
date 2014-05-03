@@ -148,7 +148,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_latency = self.tv.latency.server.series(apps[0])
+        server_latency = self.tv.server.latency_series(apps[0])
         self.assertNotEqual(server_latency, None)
         self.assertIsInstance(server_latency, dict)
         self.assertTrue('items' in server_latency)
@@ -157,7 +157,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        client_latency = self.tv.latency.client.series(apps[0])
+        client_latency = self.tv.client.latency_series(apps[0])
         self.assertNotEqual(client_latency, None)
         self.assertIsInstance(client_latency, dict)
         self.assertTrue('items' in client_latency)
@@ -166,7 +166,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_summary = self.tv.latency.server.summary(apps[0])
+        server_summary = self.tv.server.latency_summary(apps[0])
         self.assertNotEqual(server_summary, None)
         self.assertIsInstance(server_summary, dict)
         self.assertTrue('average' in server_summary)
@@ -175,7 +175,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        client_summary = self.tv.latency.client.summary(apps[0])
+        client_summary = self.tv.client.latency_summary(apps[0])
         self.assertNotEqual(client_summary, None)
         self.assertIsInstance(client_summary, dict)
         self.assertTrue('average' in client_summary)
@@ -184,7 +184,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_by_layer = self.tv.latency.server.by_layer(apps[0])
+        server_by_layer = self.tv.server.latency_by_layer(apps[0])
         self.assertNotEqual(server_by_layer, None)
         self.assertIsInstance(server_by_layer, list)
         self.assertTrue(len(server_by_layer) > 0)
