@@ -40,7 +40,7 @@ class TestOrganization(unittest.TestCase):
         self.assertTrue('name' in org)
 
     def test_users(self):
-        users = self.tv.organization.users()
+        users = self.tv.users()
         self.assertNotEqual(users, None)
         self.assertIsInstance(users, list)
         self.assertTrue(len(users) > 0)
@@ -128,14 +128,14 @@ class TestErrors(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_errors_rate(self):
+    def test_error_rates(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        errors_rate = self.tv.errors.rate(apps[0])
-        self.assertNotEqual(errors_rate, None)
-        self.assertIsInstance(errors_rate, dict)
-        self.assertTrue('items' in errors_rate)
+        error_rates = self.tv.error_rates(apps[0])
+        self.assertNotEqual(error_rates, None)
+        self.assertIsInstance(error_rates, dict)
+        self.assertTrue('items' in error_rates)
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
