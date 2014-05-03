@@ -40,31 +40,3 @@ API Documentation
 
 .. autoclass:: traceview.TraceView
    :members:
-
-Discovery
-~~~~~~~~~
-
-.. autoclass:: traceview.discovery.Action
-.. autoclass:: traceview.discovery.App
-.. autoclass:: traceview.discovery.Browser
-.. autoclass:: traceview.discovery.Controller
-.. autoclass:: traceview.discovery.Domain
-.. autoclass:: traceview.discovery.Host
-.. autoclass:: traceview.discovery.Layer
-.. autoclass:: traceview.discovery.Metric
-.. autoclass:: traceview.discovery.Region
-
-Errors
-~~~~~~
-.. autoclass:: traceview.errors.Rate
-
-Latency
-~~~~~~~
-.. autoclass:: traceview.latency.Series
-.. autoclass:: traceview.latency.Summary
-.. autoclass:: traceview.latency.ByLayer
-
-Organization
-~~~~~~~~~~~~
-.. autoclass:: traceview.organization.Organization
-.. autoclass:: traceview.organization.User
