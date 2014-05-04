@@ -190,6 +190,20 @@ class TestLatency(unittest.TestCase):
         self.assertTrue(len(server_by_layer) > 0)
 
 
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestAnnotation(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_annotation(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.annotation("test annotation", username="dan")
+        self.assertEqual(results, None)
+
+
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
