@@ -20,7 +20,7 @@ Usage
 .. code-block:: python
 
     >>> import traceview
-    >>> tv = traceview.TraceView("API KEY HERE")
+    >>> tv = traceview.TraceView('API KEY HERE')
     >>> tv.apps()
     [u'Default', u'pyramid_web_app']
     >>> tv.server.latency_summary(app='Default')
