@@ -204,6 +204,20 @@ class TestAnnotation(unittest.TestCase):
         self.assertEqual(results, None)
 
 
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestAssign(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_assign(self):
+        apps = [app for app in self.tv.apps() if app != 'Default']
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.assign(appname=apps[0], hostname='test.example.com')
+        self.assertEqual(results, None)
+
+
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
