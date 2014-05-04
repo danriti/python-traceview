@@ -14,11 +14,12 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-from .organization import Organization, User
+from .annotation import Annotation
 from .discovery import Action, App, Browser, Controller, Domain, Host
 from .discovery import Layer, Metric, Region
 from .error import Rate
 from .latency import Client, Server
+from .organization import Organization, User
 
 
 class TraceView(object):
@@ -39,6 +40,7 @@ class TraceView(object):
         self.api_key = api_key
 
         self._actions = Action(self.api_key)
+        self._annotation = Annotation(self.api_key)
         self._apps = App(self.api_key)
         self._browsers = Browser(self.api_key)
         self._controllers = Controller(self.api_key)
@@ -71,6 +73,24 @@ class TraceView(object):
 
         """
         return self._actions.get()
+
+    def annotation(self, message, *args, **kwargs):
+        """ Create an annotation.
+
+        Annotations are used to log arbitrary events into TraceView, which are
+        used to understand the correlation between system events (i.e. code
+        release, server restarts, etc) and performance trends.
+
+        :param str message: The annotation message.
+        :param str appname: (optional) The application to associate the annotation with.
+        :param str hostname: (optional) The host to associate the annotation with.
+        :param str username: (optional) The user name to associate the annotation with.
+        :param str layer: (optional) The layer name to associate the annotation with.
+        :param str time: (optional) The time to associate the annotation with, in seconds since the epoch.
+
+        """
+        kwargs['message'] = message
+        self._annotation.post(*args, **kwargs)
 
     def apps(self):
         """ Get all available applications.
