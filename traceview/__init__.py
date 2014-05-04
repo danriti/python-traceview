@@ -15,6 +15,7 @@ __license__ = 'MIT'
 
 
 from .annotation import Annotation
+from .app import Assign
 from .discovery import Action, App, Browser, Controller, Domain, Host
 from .discovery import Layer, Metric, Region
 from .error import Rate
@@ -42,6 +43,7 @@ class TraceView(object):
         self._actions = Action(self.api_key)
         self._annotation = Annotation(self.api_key)
         self._apps = App(self.api_key)
+        self._assign = Assign(self.api_key)
         self._browsers = Browser(self.api_key)
         self._controllers = Controller(self.api_key)
         self._domains = Domain(self.api_key)
@@ -107,6 +109,21 @@ class TraceView(object):
 
         """
         return self._apps.get()
+
+    def assign(self, hostname, appname, *args, **kwargs):
+        """ Assign a host to an existing application.
+
+        Please note that you cannot join host names to the `Default`
+        application, as all hosts start there.
+
+        :param str hostname: The host name to assign to the application.
+        :param str appname: The existing application name.
+        :param str layer: (optional) The layer name to assign to the application.
+
+        """
+        kwargs['appname'] = appname
+        kwargs['hostname'] = hostname
+        self._assign.post(*args, **kwargs)
 
     def browsers(self):
         """ Get all browsers used by end users.
