@@ -11,7 +11,7 @@ import os
 import unittest
 
 import traceview
-import traceview.resources
+import traceview.resource
 
 
 TV_API_KEY = os.environ.get("TV_API_KEY", None)
@@ -40,7 +40,7 @@ class TestOrganization(unittest.TestCase):
         self.assertTrue('name' in org)
 
     def test_users(self):
-        users = self.tv.organization.users()
+        users = self.tv.users()
         self.assertNotEqual(users, None)
         self.assertIsInstance(users, list)
         self.assertTrue(len(users) > 0)
@@ -128,14 +128,14 @@ class TestErrors(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_errors_rate(self):
+    def test_error_rates(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        errors_rate = self.tv.errors.rate(apps[0])
-        self.assertNotEqual(errors_rate, None)
-        self.assertIsInstance(errors_rate, dict)
-        self.assertTrue('items' in errors_rate)
+        error_rates = self.tv.error_rates(apps[0])
+        self.assertNotEqual(error_rates, None)
+        self.assertIsInstance(error_rates, dict)
+        self.assertTrue('items' in error_rates)
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
@@ -148,7 +148,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_latency = self.tv.latency.server.series(apps[0])
+        server_latency = self.tv.server.latency_series(apps[0])
         self.assertNotEqual(server_latency, None)
         self.assertIsInstance(server_latency, dict)
         self.assertTrue('items' in server_latency)
@@ -157,7 +157,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        client_latency = self.tv.latency.client.series(apps[0])
+        client_latency = self.tv.client.latency_series(apps[0])
         self.assertNotEqual(client_latency, None)
         self.assertIsInstance(client_latency, dict)
         self.assertTrue('items' in client_latency)
@@ -166,7 +166,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_summary = self.tv.latency.server.summary(apps[0])
+        server_summary = self.tv.server.latency_summary(apps[0])
         self.assertNotEqual(server_summary, None)
         self.assertIsInstance(server_summary, dict)
         self.assertTrue('average' in server_summary)
@@ -175,7 +175,7 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        client_summary = self.tv.latency.client.summary(apps[0])
+        client_summary = self.tv.client.latency_summary(apps[0])
         self.assertNotEqual(client_summary, None)
         self.assertIsInstance(client_summary, dict)
         self.assertTrue('average' in client_summary)
@@ -184,20 +184,48 @@ class TestLatency(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        server_by_layer = self.tv.latency.server.by_layer(apps[0])
+        server_by_layer = self.tv.server.latency_by_layer(apps[0])
         self.assertNotEqual(server_by_layer, None)
         self.assertIsInstance(server_by_layer, list)
         self.assertTrue(len(server_by_layer) > 0)
 
 
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestAnnotation(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_annotation(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.annotation("test annotation", username="dan")
+        self.assertEqual(results, None)
+
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestAssign(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_assign(self):
+        apps = [app for app in self.tv.apps() if app != 'Default']
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.assign(appname=apps[0], hostname='test.example.com')
+        self.assertEqual(results, None)
+
+
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
-        r = traceview.resources.Resource(None)
-        self.assertIsInstance(r, traceview.resources.Resource)
+        r = traceview.resource.Resource(None)
+        self.assertIsInstance(r, traceview.resource.Resource)
 
     def test_build_query_params(self):
-        r = traceview.resources.Resource("ABC123")
+        r = traceview.resource.Resource("ABC123")
         actual = r.build_query_params({"foo":"bar", "lol":5})
         expected = {
             "key": "ABC123",
@@ -207,7 +235,7 @@ class TestResource(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_build_query_params_no_args(self):
-        r = traceview.resources.Resource("ABC123")
+        r = traceview.resource.Resource("ABC123")
         actual = r.build_query_params()
         expected = {
             "key": "ABC123"

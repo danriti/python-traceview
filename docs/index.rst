@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 python-traceview
-=====================================
+================
 
 Release v\ |version|.
 
@@ -21,16 +21,49 @@ To install python-traceview, simply:
 
     $ pip install python-traceview
 
-Usage
------
+Quick Start
+-----------
 
-.. code-block:: python
+Accessing information from TraceView is very simple.
+
+Begin by importing the ``traceview`` module::
 
     >>> import traceview
-    >>> tv = traceview.TraceView("API KEY HERE")
+
+Now, let's initialize a TraceView object using your TraceView access (API) key.
+You can find this key on the **Organization Overview** page in TraceView::
+
+    >>> tv = traceview.TraceView('API KEY HERE')
+
+Now, we have a :py:class:`TraceView <traceview.TraceView>` object called ``tv``.
+We can get all the information we need from this object.
+
+For example, let's get all available applications setup within your TraceView
+account::
+
     >>> tv.apps()
     [u'Default', u'pyramid_web_app']
-    >>> tv.latency.server.summary(app='Default')
+
+Nice, right? We can also get a server side latency summary for the ``Default``
+application::
+
+    >>> tv.server.latency_summary(app='Default', time_window='hour')
     {u'count': 2746.0, u'average': 213911.87181354698, u'latest': 35209.87654320987}
-    >>> tv.latency.client.summary(app='Default', time_window='week')
-    {u'count': 70546.0, u'average': 10385458.60856746, u'latest': 138626.26463003372}
+
+TraceView has traced 2746 requests in the last hour, with an average latency of
+213ms. That’s all well and good, but it’s also only the start of what information you
+can get from TraceView.
+
+API Documentation
+-----------------
+
+.. autoclass:: traceview.TraceView
+   :members:
+
+Latency
+~~~~~~~
+
+.. autoclass:: traceview.latency.Client
+   :members:
+.. autoclass:: traceview.latency.Server
+   :members:

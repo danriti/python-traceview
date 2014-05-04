@@ -25,14 +25,14 @@ class Resource(object):
     AUTHORITY = "https://api.tv.appneta.com"
     VERSION = "api-v2"
     PATH = None
+    __methods = [
+        'get',
+        'post'
+    ]
 
     def __init__(self, api_key):
         self.api_key = api_key
         self.path = self.PATH
-
-    def __call__(self, *args, **kwargs):
-        params = self.build_query_params(kwargs)
-        return self.get(params=params)
 
     @property
     def uri(self):
@@ -49,21 +49,43 @@ class Resource(object):
         params.update({"key": self.api_key})
         return params
 
-    def get(self, params=None):
-        """ Perform a HTTP GET request for the given Resource.
+    def request(self, method, *args, **kwargs):
+        """ Perform a HTTP request.
 
-        :params: (optional) Dictionary of query parameters.
+        :params str method: The HTTP method to perform on the request.
+        :param dict kwargs: (optional) Query parameters for the request.
 
         """
-        if params is None:
-            params = {}
+        params = self.build_query_params(kwargs)
+
+        method = method.lower()
+        if method not in self.__methods:
+            raise requests.HTTPError("HTTP method is unsupported: %s" % (method,))
 
         if self.path is None:
-            raise Exception("Pump fake")
+            raise requests.URLRequired
 
-        log.debug(self.uri, params)
-        response = requests.get(self.uri, params=params, allow_redirects=False)
+        log.debug("%s %s %s" % (method.upper(), self.uri, params,))
+
+        request_method = getattr(requests, method)
+        response = request_method(self.uri, params=params, allow_redirects=False)
         if response.status_code != requests.codes.ok: # pylint: disable-msg=E1101
-            raise Exception(response.status_code, self.uri, response.text)
+            raise requests.HTTPError(response.status_code, self.uri, response.text)
 
         return response.json()['data']
+
+    def get(self, *args, **kwargs):
+        """ Perform a HTTP GET request.
+
+        :param dict kwargs: (optional) Query parameters for the request.
+
+        """
+        return self.request(method='get', *args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        """ Perform a HTTP POST request.
+
+        :param dict kwargs: (optional) Query parameters for the request.
+
+        """
+        return self.request(method='post', *args, **kwargs)

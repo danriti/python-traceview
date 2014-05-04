@@ -29,13 +29,16 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 with codecs.open('README.rst', encoding='utf-8') as f:
-    long_description = f.read()
+    readme = f.read()
+
+with codecs.open('HISTORY.rst', encoding='utf-8') as f:
+    history = f.read()
 
 setup(
     name="python-traceview",
     version=find_version('traceview', '__init__.py'),
     description="TraceView API Client",
-    long_description=long_description,
+    long_description=readme + '\n\n' + history,
 
     # The project URL.
     url='https://github.com/danriti/python-traceview',
