@@ -90,6 +90,12 @@ class TraceView(object):
         :param str layer: (optional) The layer name to associate the annotation with.
         :param str time: (optional) The time to associate the annotation with, in seconds since the epoch.
 
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.annotation('Code deployed', appname='production_web')
+
         """
         kwargs['message'] = message
         self._annotation.post(*args, **kwargs)
@@ -119,6 +125,12 @@ class TraceView(object):
         :param str hostname: The host name to assign to the application.
         :param str appname: The existing application name.
         :param str layer: (optional) The layer name to assign to the application.
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.assign(hostname='web-app-1234', appname='production_web')
 
         """
         kwargs['appname'] = appname
