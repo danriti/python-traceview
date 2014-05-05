@@ -10,6 +10,9 @@ import datetime
 import os
 import unittest
 
+from httmock import all_requests, response, with_httmock
+import requests
+
 import traceview
 import traceview.resource
 
@@ -17,15 +20,9 @@ import traceview.resource
 TV_API_KEY = os.environ.get("TV_API_KEY", None)
 
 
-class TestTraceView(unittest.TestCase):
-
-    def test_title(self):
-        self.assertEqual(traceview.__title__, 'traceview')
-
-    def test_initialize(self):
-        tv = traceview.TraceView(None)
-        self.assertIsInstance(tv, traceview.TraceView)
-
+################################################################################
+# API Tests
+################################################################################
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestOrganization(unittest.TestCase):
@@ -218,6 +215,43 @@ class TestAssign(unittest.TestCase):
         self.assertEqual(results, None)
 
 
+################################################################################
+# Mocks
+################################################################################
+
+@all_requests
+def traceview_api_mock(url, request):
+    headers = {'content-type': 'application/json'}
+    content = {
+        'data': {'foo': 'bar'},
+        'response': 'ok'
+    }
+    return response(200, content, headers, None, 5, request)
+
+@all_requests
+def traceview_api_mock_forbidden(url, request):
+    headers = {'content-type': 'application/json'}
+    content = {
+        'data': {'foo': 'bar'},
+        'response': 'ok'
+    }
+    return response(403, content, headers, None, 5, request)
+
+
+################################################################################
+# Unit Tests
+################################################################################
+
+class TestTraceView(unittest.TestCase):
+
+    def test_title(self):
+        self.assertEqual(traceview.__title__, 'traceview')
+
+    def test_initialize(self):
+        tv = traceview.TraceView(None)
+        self.assertIsInstance(tv, traceview.TraceView)
+
+
 class TestResource(unittest.TestCase):
 
     def test_initialize(self):
@@ -234,6 +268,12 @@ class TestResource(unittest.TestCase):
         }
         self.assertEqual(actual, expected)
 
+    def test_build_query_params_bad_args(self):
+        r = traceview.resource.Resource("ABC123")
+        actual = r.build_query_params([])
+        self.assertNotEqual(actual, None)
+        self.assertIsInstance(actual, dict)
+
     def test_build_query_params_no_args(self):
         r = traceview.resource.Resource("ABC123")
         actual = r.build_query_params()
@@ -241,6 +281,45 @@ class TestResource(unittest.TestCase):
             "key": "ABC123"
         }
         self.assertEqual(actual, expected)
+
+    def test_uri(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        self.assertEqual(r.uri, "https://api.tv.appneta.com/api-v2/lol")
+
+    @with_httmock(traceview_api_mock)
+    def test_request_get(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        results = r.get()
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, dict)
+
+    @with_httmock(traceview_api_mock)
+    def test_request_post(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        results = r.get()
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, dict)
+
+    @with_httmock(traceview_api_mock_forbidden)
+    def test_request_forbidden(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        with self.assertRaises(requests.HTTPError):
+            r.get()
+
+    def test_request_unsupported_method(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        with self.assertRaises(requests.HTTPError):
+            r.request('put')
+
+    def test_request_no_path(self):
+        r = traceview.resource.Resource("ABC123")
+        with self.assertRaises(requests.URLRequired):
+            r.request('get')
 
 
 if __name__ == '__main__':

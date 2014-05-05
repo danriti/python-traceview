@@ -12,6 +12,8 @@ Library for providing access to the TraceView API v2.
 
 Please see the `TraceView API Reference <http://dev.appneta.com/docs/api-v2/reference.html>`_ for more information.
 
+Supports Python 2.7, 3.2, 3.3, 3.4
+
 Installation
 ------------
 
