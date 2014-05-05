@@ -1,9 +1,9 @@
 python-traceview
 ================
 
-.. image:: https://badge.fury.io/py/python-traceview.svg
+.. image:: https://badge.fury.io/py/python-traceview.png
     :target: http://badge.fury.io/py/python-traceview
-.. image:: https://travis-ci.org/danriti/python-traceview.svg?branch=master
+.. image:: https://travis-ci.org/danriti/python-traceview.png?branch=master
     :target: https://travis-ci.org/danriti/python-traceview
 
 Library for providing access to the TraceView API v2.
