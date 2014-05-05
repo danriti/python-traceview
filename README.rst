@@ -1,6 +1,11 @@
 python-traceview
 ================
 
+.. image:: https://badge.fury.io/py/python-traceview.svg
+    :target: http://badge.fury.io/py/python-traceview
+.. image:: https://travis-ci.org/danriti/python-traceview.svg?branch=master
+    :target: https://travis-ci.org/danriti/python-traceview
+
 Library for providing access to the TraceView API v2.
 
 Please see the `TraceView API Reference <http://dev.appneta.com/docs/api-v2/reference.html>`_ for more information.
