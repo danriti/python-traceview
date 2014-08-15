@@ -12,6 +12,10 @@ http://dev.appneta.com/docs/api-v2/annotations.html
 from .resource import Resource
 
 
-class Annotation(Resource):
+class Annotate(Resource):
 
     PATH = "log_message"
+
+class Annotations(Resource):
+
+    PATH = "annotations"

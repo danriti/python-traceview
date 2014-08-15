@@ -36,12 +36,6 @@ class Domain(Resource):
 
     PATH = "domains"
 
-
-class Host(Resource):
-
-    PATH = "hosts"
-
-
 class Layer(Resource):
 
     PATH = "layers/{app}"

@@ -14,13 +14,14 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-from .annotation import Annotation
-from .app import Assign
-from .discovery import Action, App, Browser, Controller, Domain, Host
+from .annotation import Annotate, Annotations
+from .app import Assign, AppAnnotations, AppHosts
+from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
+from .host import Hosts, Versions, DeleteHost
 from .error import Rate
 from .latency import Client, Server
-from .organization import Organization, User
+from .organization import Organization, User, Licenses
 
 
 class TraceView(object):
@@ -41,19 +42,26 @@ class TraceView(object):
         self.api_key = api_key
 
         self._actions = Action(self.api_key)
-        self._annotation = Annotation(self.api_key)
+        self._annotate = Annotate(self.api_key)
         self._apps = App(self.api_key)
         self._assign = Assign(self.api_key)
         self._browsers = Browser(self.api_key)
         self._controllers = Controller(self.api_key)
         self._domains = Domain(self.api_key)
         self._error_rates = Rate(self.api_key)
-        self._hosts = Host(self.api_key)
         self._layers = Layer(self.api_key)
         self._metrics = Metric(self.api_key)
         self._organization = Organization(self.api_key)
         self._regions = Region(self.api_key)
         self._users = User(self.api_key)
+
+        self._licenses = Licenses(self.api_key)
+        self._hosts = Hosts(self.api_key)
+        self._app_annotations = AppAnnotations(self.api_key)
+        self._app_hosts = AppHosts(self.api_key)
+        self._annotations = Annotations(self.api_key)
+        self._versions = Versions(self.api_key)
+        self._delete_host = DeleteHost(self.api_key)
 
         #: Get :py:class:`Client <traceview.latency.Client>` latency information.
         self.client = Client(self.api_key)
@@ -76,7 +84,7 @@ class TraceView(object):
         """
         return self._actions.get()
 
-    def annotation(self, message, *args, **kwargs):
+    def annotate(self, message, *args, **kwargs):
         """ Create an annotation.
 
         Annotations are used to log arbitrary events into TraceView, which are
@@ -98,7 +106,28 @@ class TraceView(object):
 
         """
         kwargs['message'] = message
-        self._annotation.post(*args, **kwargs)
+        self._annotate.post(*args, **kwargs)
+
+    def annotations(self, *args, **kwargs):
+        """ Get all annotations.
+
+        The default time window is one week.
+
+        :param int time_start: (optional) the start of the time window in UTC milliseconds
+        :param int time_end: (optional) the end of the time_window in UTC milliseconds
+        :return: all annotations within the time window
+        :rtype: list
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.annotations()
+          [{u'id': 9, u'username': 'appneta', u'app': 21, u'host': '987-65-4321-xyz',
+              'time': 1378215829, u'message': 'update to version 2.1'}, {...}]
+
+        """
+        return self._annotations.get(*args, **kwargs)
 
     def apps(self):
         """ Get all available applications.
@@ -115,6 +144,45 @@ class TraceView(object):
 
         """
         return self._apps.get()
+
+    def app_annotations(self, app, *args, **kwargs):
+        """ Get annotations for an app.
+
+        The default time window is one week.
+
+        :param int time_start: (optional) the start of the time window in UTC milliseconds
+        :param int time_end: (optional) the end of the time_window in UTC milliseconds
+        :return: all annotations on the specified app within the time window
+        :rtype: list
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.app_annotations('Default')
+          [{u'id': 10, u'username': 'appneta', u'app': 15, u'host': '123-45-678-abc',
+              'time': 1408115329, u'message': 'restart server'}, {...}]
+
+        """
+        return self._app_annotations.get(app, *args, **kwargs)
+
+    def app_hosts(self, app, *args, **kwargs):
+        """ Get hosts assigned to an app
+
+        :params str app: the application name
+        :return: all hosts assigned to a specific app
+        :rtype: list
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.app_hosts('Default')
+          [{u'id': 38493823, u'name': 'abc-de-fgh-123', u'first_heartbeat': 1401298980,
+              u'last_heartbeat': 1408116415, u'last_trace': 1408116000}, {...}]
+
+        """
+        return self._app_hosts.get(app, *args, **kwargs)
 
     def assign(self, hostname, appname, *args, **kwargs):
         """ Assign a host to an existing application.
@@ -168,6 +236,23 @@ class TraceView(object):
 
         """
         return self._controllers.get()
+
+    def delete_host(self, host_id, *args, **kwargs):
+        """ Delete a host.
+
+        :param str host_id: the id of the host to delete
+        :return: true on success, error on failure
+        :rtype: boolean
+
+        Usage::
+
+          >>> usage import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.delete_host('123')
+          true
+
+        """
+        return self._delete_host.delete(host_id, *args, **kwargs)
 
     def domains(self):
         """ Get all domains that have been traced.
@@ -242,6 +327,23 @@ class TraceView(object):
         """
         return self._layers.get(app, *args, **kwargs)
 
+    def licenses(self):
+        """ Get the current number of hosts reporting traces
+        and the number of hosts licensed to the organization.
+
+        :return: licensing information for organization
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.licenses()
+          {u'hosts_used': 5, u'hosts_limit': 10}
+
+        """
+        return self._licenses.get()
+
     def metrics(self):
         """ Get all available host metrics that have been collected.
 
@@ -304,8 +406,25 @@ class TraceView(object):
 
           >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.organization.users()
+          >>> tv.users()
           [{u'admin': True, u'name': u'Jane Doe', u'email': u'jdoe@example.com'}, { ... }]
 
         """
         return self._users.get()
+
+    def versions(self, host_id, *args, **kwargs):
+        """ Get instrumentation version information for a host.
+
+        :param str host_id: The id of the host
+        :return: instrumentation version information for a host
+        :rtype: list
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.versions()
+          [{u'name': 'tracelyzer', u'version': '0.2.0', u'release_date': 1379078081', u'update_required': false}, {...}]
+
+        """
+        return self._versions.get(host_id, *args, **kwargs)
