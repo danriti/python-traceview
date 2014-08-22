@@ -197,7 +197,7 @@ class TestAnnotation(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        results = self.tv.annotation("test annotation", username="dan")
+        results = self.tv.annotate("test annotation", username="dan")
         self.assertEqual(results, None)
 
 
