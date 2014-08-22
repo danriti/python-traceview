@@ -193,23 +193,40 @@ class TestAnnotation(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_annotate(self):
+    def test_annotate_all(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
         results = self.tv.annotate("test annotation", username="dan")
         self.assertEqual(results, None)
 
-    def test_get_annotations(self):
-        apps = self.tv.apps()
-        self.assertTrue(len(apps) > 0)
-
+    def test_get_all_annotations(self):
         annotations = self.tv.annotations()
         self.assertNotEqual(annotations, None)
         self.assertIsInstance(annotations, list)
         #cardinal sin, this will fail if creating annotation fails!
         self.assertTrue(len(annotations) > 0)
 
+    def test_annotate_single_app(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 1)
+        results = self.tv.annotate("annotate Default app", appname="Default", username="dan")
+        self.assertEqual(results, None)
+
+    def test_get_single_app_annotation(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 1)
+
+        default_annotations = self.tv.app_annotations(app='Default')
+        other_annotations = self.tv.app_annotations(app=apps[1])
+
+        self.assertNotEqual(default_annotations, None)
+        self.assertNotEqual(other_annotations, None)
+
+        self.assertIsInstance(default_annotations, list)
+        self.assertIsInstance(other_annotations, list)
+
+        self.assertTrue(len(default_annotations) > len(other_annotations))
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestAssign(unittest.TestCase):
