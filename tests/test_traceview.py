@@ -193,12 +193,22 @@ class TestAnnotation(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_annotation(self):
+    def test_annotate(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
         results = self.tv.annotate("test annotation", username="dan")
         self.assertEqual(results, None)
+
+    def test_get_annotations(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        annotations = self.tv.annotations()
+        self.assertNotEqual(annotations, None)
+        self.assertIsInstance(annotations, list)
+        #cardinal sin, this will fail if creating annotation fails!
+        self.assertTrue(len(annotations) > 0)
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
