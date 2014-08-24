@@ -49,6 +49,9 @@ class TestDiscovery(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
+    def test_licenses(self):
+        licenses = self.tv.licenses()
+
     def test_apps(self):
         apps = self.tv.apps()
         self.assertNotEqual(apps, None)
@@ -227,6 +230,54 @@ class TestAnnotation(unittest.TestCase):
         self.assertIsInstance(other_annotations, list)
 
         self.assertTrue(len(default_annotations) > len(other_annotations))
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestApp(unittest.TestCase):
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_app_annotations(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 1)
+
+        default_annotations = self.tv.app_annotations(app='Default')
+        other_annotations = self.tv.app_annotations(app=apps[1])
+
+        self.assertNotEqual(default_annotations, None)
+        self.assertNotEqual(other_annotations, None)
+
+        self.assertIsInstance(default_annotations, list)
+        self.assertIsInstance(other_annotations, list)
+
+        self.assertTrue(len(default_annotations) > len(other_annotations))
+
+    def test_app_hosts(self):
+        app_hosts = self.tv.app_hosts(app='Default')
+        self.assertNotEqual(app_hosts, None)
+        self.assertIsInstance(app_hosts, list)
+        self.assertTrue(len(app_hosts) > 0)
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestHost(unittest.TestCase):
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+        self.hosts = self.tv.hosts()
+
+    def test_host_versions(self):
+        versions = self.tv.versions(self.hosts[0]['id'])
+        self.assertNotEqual(versions, None)
+        self.assertIsInstance(versions, list)
+        self.assertIsInstance(versions[0], dict)
+
+    def test_host_delete(self):
+        for host in self.hosts:
+            age = datetime.datetime.now() - datetime.datetime.fromtimestamp(host['last_heartbeat'])
+            if age.total_seconds > 600:
+                deleted = self.tv.delete_host(host['id'])
+                self.assertEqual(deleted, True)
+                return
+        raise Warning('No host delete candidates found,  deletion test skipped!')
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestAssign(unittest.TestCase):
