@@ -272,7 +272,7 @@ class TestHost(unittest.TestCase):
     def test_host_delete(self):
         for host in self.hosts:
             age = datetime.datetime.now() - datetime.datetime.fromtimestamp(host['last_heartbeat'])
-            if age.total_seconds > 600:
+            if age.total_seconds() > 600:
                 deleted = self.tv.delete_host(host['id'])
                 self.assertEqual(deleted, True)
                 return
