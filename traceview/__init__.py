@@ -14,7 +14,7 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-from .annotation import Annotate, Annotations
+from .annotation import Annotation, Annotations
 from .app import Assign, AppAnnotations, AppHosts
 from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
@@ -42,7 +42,8 @@ class TraceView(object):
         self.api_key = api_key
 
         self._actions = Action(self.api_key)
-        self._annotate = Annotate(self.api_key)
+        self._annotation = Annotation(self.api_key)
+        self._annotations = Annotations(self.api_key)
         self._apps = App(self.api_key)
         self._assign = Assign(self.api_key)
         self._browsers = Browser(self.api_key)
@@ -57,9 +58,7 @@ class TraceView(object):
 
         self._licenses = Licenses(self.api_key)
         self._hosts = Hosts(self.api_key)
-        self._app_annotations = AppAnnotations(self.api_key)
         self._app_hosts = AppHosts(self.api_key)
-        self._annotations = Annotations(self.api_key)
         self._versions = Versions(self.api_key)
         self._delete_host = DeleteHost(self.api_key)
 
@@ -84,7 +83,7 @@ class TraceView(object):
         """
         return self._actions.get()
 
-    def annotate(self, message, *args, **kwargs):
+    def annotation(self, message, *args, **kwargs):
         """ Create an annotation.
 
         Annotations are used to log arbitrary events into TraceView, which are
@@ -106,28 +105,39 @@ class TraceView(object):
 
         """
         kwargs['message'] = message
-        self._annotate.post(*args, **kwargs)
+        self._annotation.post(*args, **kwargs)
 
-    def annotations(self, *args, **kwargs):
-        """ Get all annotations.
+    def annotations(self, appname=None, *args, **kwargs):
+        """ Get annotations.
+
+        Annotations are used to log arbitrary events into TraceView, which are
+        used to understand the correlation between system events (i.e. code
+        release, server restarts, etc) and performance trends.
 
         The default time window is one week.
 
-        :param int time_start: (optional) the start of the time window in UTC milliseconds
-        :param int time_end: (optional) the end of the time_window in UTC milliseconds
-        :return: all annotations within the time window
+        :param str appname: (optional) The application name to filter annotations by.
+        :param str time_start: (optional) The start time for the time window, in milliseconds since the epoch.
+        :param str time_end: (optional) The end time for the time window, in milliseconds since the epoch.
         :rtype: list
 
         Usage::
 
+          >>> import pprint
           >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.annotations()
-          [{u'id': 9, u'username': 'appneta', u'app': 21, u'host': '987-65-4321-xyz',
-              'time': 1378215829, u'message': 'update to version 2.1'}, {...}]
+          >>> pprint.pprint(tv.annotations(appname='production_web'))
+          [{u'app': 3,
+            u'host': u'prod-web.example.com',
+            u'id': 123,
+            u'message': u'Code deployed',
+            u'time': 1409685758,
+            u'username': u'dan'},
+            ...
+          ]
 
         """
-        return self._annotations.get(*args, **kwargs)
+        return self._annotations.get(app=appname, *args, **kwargs)
 
     def apps(self):
         """ Get all available applications.
@@ -144,27 +154,6 @@ class TraceView(object):
 
         """
         return self._apps.get()
-
-    def app_annotations(self, app, *args, **kwargs):
-        """ Get annotations for an app.
-
-        The default time window is one week.
-
-        :param int time_start: (optional) the start of the time window in UTC milliseconds
-        :param int time_end: (optional) the end of the time_window in UTC milliseconds
-        :return: all annotations on the specified app within the time window
-        :rtype: list
-
-        Usage::
-
-          >>> import traceview
-          >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.app_annotations('Default')
-          [{u'id': 10, u'username': 'appneta', u'app': 15, u'host': '123-45-678-abc',
-              'time': 1408115329, u'message': 'restart server'}, {...}]
-
-        """
-        return self._app_annotations.get(app, *args, **kwargs)
 
     def app_hosts(self, app, *args, **kwargs):
         """ Get hosts assigned to an app
