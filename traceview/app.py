@@ -16,19 +16,6 @@ class Assign(Resource):
 
     PATH = "assign_app"
 
-class AppAnnotations(Resource):
-
-    PATH = "app/{app}/annotations"
-
-    def get(self, app, *args, **kwargs):
-        """ Overloaded get method.
-
-        :param str app: The app name to list annotations.
-
-        """
-        self.path = self.PATH.format(app=app)
-        return super(AppAnnotations, self).get(*args, **kwargs)
-
 class AppHosts(Resource):
 
     PATH = "app/{app}/hosts"

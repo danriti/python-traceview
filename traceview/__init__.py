@@ -15,7 +15,7 @@ __license__ = 'MIT'
 
 
 from .annotation import Annotation, Annotations
-from .app import Assign, AppAnnotations, AppHosts
+from .app import Assign, AppHosts
 from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
 from .host import Hosts, Versions, DeleteHost
