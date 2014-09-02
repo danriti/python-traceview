@@ -1,4 +1,7 @@
-*.env
-*.venv
 *.pyc
-.gitignore
+build/
+dist/
+python_traceview.egg-info/
+docs/_build/
+.tox/
+.coverage
