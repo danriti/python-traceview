@@ -51,12 +51,12 @@ class TraceView(object):
         self._domains = Domain(self.api_key)
         self._error_rates = Rate(self.api_key)
         self._layers = Layer(self.api_key)
+        self._licenses = Licenses(self.api_key)
         self._metrics = Metric(self.api_key)
         self._organization = Organization(self.api_key)
         self._regions = Region(self.api_key)
         self._users = User(self.api_key)
 
-        self._licenses = Licenses(self.api_key)
         self._hosts = Hosts(self.api_key)
         self._app_hosts = AppHosts(self.api_key)
         self._versions = Versions(self.api_key)
@@ -317,10 +317,10 @@ class TraceView(object):
         return self._layers.get(app, *args, **kwargs)
 
     def licenses(self):
-        """ Get the current number of hosts reporting traces
-        and the number of hosts licensed to the organization.
+        """ Get the current number of hosts reporting traces and the number of
+        hosts licensed to the organization.
 
-        :return: licensing information for organization
+        :return: Licensing information for organization.
         :rtype: dict
 
         Usage::
