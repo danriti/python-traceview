@@ -14,7 +14,7 @@ __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
-from .annotation import Annotation, Annotations
+from .annotation import Annotation
 from .app import Assign, AppHosts
 from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
@@ -43,7 +43,6 @@ class TraceView(object):
 
         self._actions = Action(self.api_key)
         self._annotation = Annotation(self.api_key)
-        self._annotations = Annotations(self.api_key)
         self._apps = App(self.api_key)
         self._assign = Assign(self.api_key)
         self._browsers = Browser(self.api_key)
@@ -137,7 +136,7 @@ class TraceView(object):
           ]
 
         """
-        return self._annotations.get(app=appname, *args, **kwargs)
+        return self._annotation.get(app=appname, *args, **kwargs)
 
     def apps(self):
         """ Get all available applications.
