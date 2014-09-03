@@ -42,15 +42,18 @@ class TestOrganization(unittest.TestCase):
         self.assertIsInstance(users, list)
         self.assertTrue(len(users) > 0)
 
+    def test_licenses(self):
+        licenses = self.tv.licenses()
+        self.assertNotEqual(licenses, None)
+        self.assertIsInstance(licenses, dict)
+        self.assertTrue('hosts_used' in licenses)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestDiscovery(unittest.TestCase):
 
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
-
-    def test_licenses(self):
-        licenses = self.tv.licenses()
 
     def test_apps(self):
         apps = self.tv.apps()
