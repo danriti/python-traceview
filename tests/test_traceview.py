@@ -363,7 +363,7 @@ class TestResource(unittest.TestCase):
     def test_request_post(self):
         r = traceview.resource.Resource("ABC123")
         r.path = "lol"
-        results = r.get()
+        results = r.post()
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
