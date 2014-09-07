@@ -219,7 +219,7 @@ class TraceView(object):
           True
 
         """
-        return self.hosts.delete(host_id, *args, **kwargs)
+        return self._hosts.delete(host_id, *args, **kwargs)
 
     def domains(self):
         """ Get all domains that have been traced.
