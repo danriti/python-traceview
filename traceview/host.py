@@ -12,32 +12,45 @@ http://dev.appneta.com/docs/api-v2/hosts.html
 from .resource import Resource
 
 
-class Hosts(Resource):
+class Host(Resource):
 
-    PATH = "hosts"
+    PATH = {
+        "GET": "hosts",
+        "GET_BY_APP": "app/{app}/hosts",
+        "DELETE": "hosts/{host_id}"
+    }
 
-class Versions(Resource):
+    def get(self, app=None, *args, **kwargs):
+        """ Get hosts.
+
+        :param str app: (optional) The application name.
+
+        """
+        if app:
+            self.path = self.PATH["GET_BY_APP"].format(app=app)
+        else:
+            self.path = self.PATH["GET"]
+        return super(Host, self).get(*args, **kwargs)
+
+    def delete(self, host_id, *args, **kwargs):
+        """ Delete host.
+
+        :param str host_id: The host_id to delete.
+
+        """
+        self.path = self.PATH["DELETE"].format(host_id=host_id)
+        return super(Host, self).delete(*args, **kwargs)
+
+
+class Instrumentation(Resource):
 
     PATH = "hosts/{host_id}/versions"
 
     def get(self, host_id, *args, **kwargs):
-        """ Overloaded get method.
+        """ Get instrumentation versions for host.
 
         :param str host_id: The host_id to list version information.
 
         """
         self.path = self.PATH.format(host_id=host_id)
-        return super(Versions, self).get(*args, **kwargs)
-
-class DeleteHost(Resource):
-
-    PATH = "hosts/{host_id}"
-
-    def delete(self, host_id, *args, **kwargs):
-        """ Overloaded delete method.
-
-        :param str host_id: The host_id to delete.
-
-        """
-        self.path = self.PATH.format(host_id=host_id)
-        return super(DeleteHost, self).delete(*args, **kwargs)
+        return super(Instrumentation, self).get(*args, **kwargs)
