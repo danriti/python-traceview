@@ -106,12 +106,6 @@ class TestDiscovery(unittest.TestCase):
         self.assertIsInstance(browsers, list)
         self.assertTrue(len(browsers) > 0)
 
-    def test_hosts(self):
-        hosts = self.tv.hosts()
-        self.assertNotEqual(hosts, None)
-        self.assertIsInstance(hosts, list)
-        self.assertTrue(len(hosts) > 0)
-
     def test_metrics(self):
         metrics = self.tv.metrics()
         self.assertNotEqual(metrics, None)
@@ -216,53 +210,42 @@ class TestAnnotation(unittest.TestCase):
         self.assertTrue(len(results) > 0)
         self.assertTrue('message' in results[0])
 
-
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
-class TestApp(unittest.TestCase):
-    def setUp(self):
-        self.tv = traceview.TraceView(TV_API_KEY)
-
-    def test_app_annotations(self):
+    def test_annotations_by_app(self):
         apps = self.tv.apps()
-        self.assertTrue(len(apps) > 1)
+        self.assertTrue(len(apps) > 0)
 
-        default_annotations = self.tv.app_annotations(app='Default')
-        other_annotations = self.tv.app_annotations(app=apps[1])
+        results = self.tv.annotations(appname='Default')
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, list)
+        self.assertTrue(len(results) > 0)
+        self.assertTrue('message' in results[0])
 
-        self.assertNotEqual(default_annotations, None)
-        self.assertNotEqual(other_annotations, None)
-
-        self.assertIsInstance(default_annotations, list)
-        self.assertIsInstance(other_annotations, list)
-
-        self.assertTrue(len(default_annotations) > len(other_annotations))
-
-    def test_app_hosts(self):
-        app_hosts = self.tv.app_hosts(app='Default')
-        self.assertNotEqual(app_hosts, None)
-        self.assertIsInstance(app_hosts, list)
-        self.assertTrue(len(app_hosts) > 0)
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestHost(unittest.TestCase):
+
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
         self.hosts = self.tv.hosts()
 
-    def test_host_versions(self):
-        versions = self.tv.versions(self.hosts[0]['id'])
+    def test_hosts(self):
+        hosts = self.tv.hosts()
+        self.assertNotEqual(hosts, None)
+        self.assertIsInstance(hosts, list)
+        self.assertTrue(len(hosts) > 0)
+
+    def test_hosts_by_app(self):
+        hosts = self.tv.hosts(appname="Default")
+        self.assertNotEqual(hosts, None)
+        self.assertIsInstance(hosts, list)
+        self.assertTrue(len(hosts) > 0)
+
+    def test_instrumentation(self):
+        host_id = self.hosts[0]['id']
+        versions = self.tv.instrumentation(host_id=host_id)
         self.assertNotEqual(versions, None)
         self.assertIsInstance(versions, list)
         self.assertIsInstance(versions[0], dict)
-
-    def test_host_delete(self):
-        for host in self.hosts:
-            age = datetime.datetime.now() - datetime.datetime.fromtimestamp(host['last_heartbeat'])
-            if age.total_seconds() > 600:
-                deleted = self.tv.delete_host(host['id'])
-                self.assertEqual(deleted, True)
-                return
-        raise Warning('No host delete candidates found,  deletion test skipped!')
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
