@@ -367,6 +367,14 @@ class TestResource(unittest.TestCase):
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
+    @with_httmock(traceview_api_mock)
+    def test_request_delete(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        results = r.delete()
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, dict)
+
     @with_httmock(traceview_api_mock_forbidden)
     def test_request_forbidden(self):
         r = traceview.resource.Resource("ABC123")
