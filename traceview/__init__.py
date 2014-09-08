@@ -207,8 +207,6 @@ class TraceView(object):
     def delete(self, host_id, *args, **kwargs):
         """ Delete an existing host.
 
-        Deletes an existing host from TraceView.
-
         :param str host_id: The id of the host to delete.
         :return: indicates if host was successfully deleted.
         :rtype: boolean
@@ -260,7 +258,7 @@ class TraceView(object):
         """
         return self._error_rates.get(app, *args, **kwargs)
 
-    def hosts(self, appname=None):
+    def hosts(self, appname=None, *args, **kwargs):
         """ Get all hosts that have been traced.
 
         :param str appname: (optional) The application name to filter hosts by.
@@ -324,7 +322,7 @@ class TraceView(object):
         """ Get the current number of hosts reporting traces and the number of
         hosts licensed to the organization.
 
-        :return: Licensing information for organization.
+        :return: licensing information for organization.
         :rtype: dict
 
         Usage::
