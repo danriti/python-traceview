@@ -207,6 +207,8 @@ class TraceView(object):
     def delete(self, host_id, *args, **kwargs):
         """ Delete an existing host.
 
+        Deletes an existing host from TraceView.
+
         :param str host_id: The id of the host to delete.
         :return: indicates if host was successfully deleted.
         :rtype: boolean
