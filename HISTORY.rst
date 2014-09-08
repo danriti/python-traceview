@@ -3,6 +3,15 @@
 Release History
 ---------------
 
+0.4.0 (2014-09-08)
+++++++++++++++++++
+
+- Add support for licenses
+- Add support for annotations improvements
+- Add support for deleting old hosts
+- Add support for hosts by app
+- Add support for instrumentation versions
+
 0.3.0 (2014-05-05)
 ++++++++++++++++++
 
