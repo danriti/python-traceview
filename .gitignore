@@ -5,3 +5,4 @@ python_traceview.egg-info/
 docs/_build/
 .tox/
 .coverage
+.env/

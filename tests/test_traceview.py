@@ -42,6 +42,12 @@ class TestOrganization(unittest.TestCase):
         self.assertIsInstance(users, list)
         self.assertTrue(len(users) > 0)
 
+    def test_licenses(self):
+        licenses = self.tv.licenses()
+        self.assertNotEqual(licenses, None)
+        self.assertIsInstance(licenses, dict)
+        self.assertTrue('hosts_used' in licenses)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestDiscovery(unittest.TestCase):
@@ -99,12 +105,6 @@ class TestDiscovery(unittest.TestCase):
         self.assertNotEqual(browsers, None)
         self.assertIsInstance(browsers, list)
         self.assertTrue(len(browsers) > 0)
-
-    def test_hosts(self):
-        hosts = self.tv.hosts()
-        self.assertNotEqual(hosts, None)
-        self.assertIsInstance(hosts, list)
-        self.assertTrue(len(hosts) > 0)
 
     def test_metrics(self):
         metrics = self.tv.metrics()
@@ -199,6 +199,53 @@ class TestAnnotation(unittest.TestCase):
 
         results = self.tv.annotation("test annotation", username="dan")
         self.assertEqual(results, None)
+
+    def test_annotations(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.annotations()
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, list)
+        self.assertTrue(len(results) > 0)
+        self.assertTrue('message' in results[0])
+
+    def test_annotations_by_app(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        results = self.tv.annotations(appname='Default')
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, list)
+        self.assertTrue(len(results) > 0)
+        self.assertTrue('message' in results[0])
+
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestHost(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+        self.hosts = self.tv.hosts()
+
+    def test_hosts(self):
+        hosts = self.tv.hosts()
+        self.assertNotEqual(hosts, None)
+        self.assertIsInstance(hosts, list)
+        self.assertTrue(len(hosts) > 0)
+
+    def test_hosts_by_app(self):
+        hosts = self.tv.hosts(appname="Default")
+        self.assertNotEqual(hosts, None)
+        self.assertIsInstance(hosts, list)
+        self.assertTrue(len(hosts) > 0)
+
+    def test_instrumentation(self):
+        host_id = self.hosts[0]['id']
+        versions = self.tv.instrumentation(host_id=host_id)
+        self.assertNotEqual(versions, None)
+        self.assertIsInstance(versions, list)
+        self.assertIsInstance(versions[0], dict)
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
@@ -299,7 +346,15 @@ class TestResource(unittest.TestCase):
     def test_request_post(self):
         r = traceview.resource.Resource("ABC123")
         r.path = "lol"
-        results = r.get()
+        results = r.post()
+        self.assertNotEqual(results, None)
+        self.assertIsInstance(results, dict)
+
+    @with_httmock(traceview_api_mock)
+    def test_request_delete(self):
+        r = traceview.resource.Resource("ABC123")
+        r.path = "lol"
+        results = r.delete()
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 

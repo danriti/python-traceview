@@ -27,7 +27,8 @@ class Resource(object):
     PATH = None
     __methods = [
         'get',
-        'post'
+        'post',
+        'delete'
     ]
 
     def __init__(self, api_key):
@@ -89,3 +90,11 @@ class Resource(object):
 
         """
         return self.request(method='post', *args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """ Perform a HTTP DELETE request.
+
+        :param dict kwargs: (optional) Query paramters for the request.
+
+        """
+        return self.request(method='delete', *args, **kwargs)

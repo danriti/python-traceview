@@ -9,18 +9,19 @@ TraceView API library
 """
 
 __title__ = 'traceview'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
 from .annotation import Annotation
 from .app import Assign
-from .discovery import Action, App, Browser, Controller, Domain, Host
+from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
+from .host import Host, Instrumentation
 from .error import Rate
 from .latency import Client, Server
-from .organization import Organization, User
+from .organization import Organization, User, Licenses
 
 
 class TraceView(object):
@@ -49,7 +50,9 @@ class TraceView(object):
         self._domains = Domain(self.api_key)
         self._error_rates = Rate(self.api_key)
         self._hosts = Host(self.api_key)
+        self._instrumentation = Instrumentation(self.api_key)
         self._layers = Layer(self.api_key)
+        self._licenses = Licenses(self.api_key)
         self._metrics = Metric(self.api_key)
         self._organization = Organization(self.api_key)
         self._regions = Region(self.api_key)
@@ -99,6 +102,38 @@ class TraceView(object):
         """
         kwargs['message'] = message
         self._annotation.post(*args, **kwargs)
+
+    def annotations(self, appname=None, *args, **kwargs):
+        """ Get annotations.
+
+        Annotations are used to log arbitrary events into TraceView, which are
+        used to understand the correlation between system events (i.e. code
+        release, server restarts, etc) and performance trends.
+
+        The default time window is one week.
+
+        :param str appname: (optional) The application name to filter annotations by.
+        :param str time_start: (optional) The start time for the time window, in milliseconds since the epoch.
+        :param str time_end: (optional) The end time for the time window, in milliseconds since the epoch.
+        :rtype: list
+
+        Usage::
+
+          >>> import pprint
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> pprint.pprint(tv.annotations(appname='production_web'))
+          [{u'app': 3,
+            u'host': u'prod-web.example.com',
+            u'id': 123,
+            u'message': u'Code deployed',
+            u'time': 1409685758,
+            u'username': u'dan'},
+            ...
+          ]
+
+        """
+        return self._annotation.get(app=appname, *args, **kwargs)
 
     def apps(self):
         """ Get all available applications.
@@ -169,6 +204,25 @@ class TraceView(object):
         """
         return self._controllers.get()
 
+    def delete(self, host_id, *args, **kwargs):
+        """ Delete an existing host.
+
+        Deletes an existing host from TraceView.
+
+        :param str host_id: The id of the host to delete.
+        :return: indicates if host was successfully deleted.
+        :rtype: boolean
+
+        Usage::
+
+          >>> usage import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.delete(host_id='123')
+          True
+
+        """
+        return self._hosts.delete(host_id, *args, **kwargs)
+
     def domains(self):
         """ Get all domains that have been traced.
 
@@ -206,9 +260,10 @@ class TraceView(object):
         """
         return self._error_rates.get(app, *args, **kwargs)
 
-    def hosts(self):
+    def hosts(self, appname=None):
         """ Get all hosts that have been traced.
 
+        :param str appname: (optional) The application name to filter hosts by.
         :return: all hosts traced
         :rtype: list
 
@@ -220,7 +275,30 @@ class TraceView(object):
           [u'db.example.com', u'api.example.com', u'www.example.com', u'mail.example.com']
 
         """
-        return self._hosts.get()
+        return self._hosts.get(app=appname)
+
+    def instrumentation(self, host_id, *args, **kwargs):
+        """ Get instrumentation version information for a host.
+
+        :param str host_id: The id of the host.
+        :return: instrumentation version information for a host
+        :rtype: list
+
+        Usage::
+
+          >>> import pprint
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> pprint.pprint(tv.instrumentation(host_id=1))
+          [{u'name': u'tracelyzer',
+            u'release_date': 1374537600,
+            u'update_required': True,
+            u'version': u'1.1.1'},
+            ...
+          ]
+
+        """
+        return self._instrumentation.get(host_id, *args, **kwargs)
 
     def layers(self, app, *args, **kwargs):
         """ Get all recent layers for an application.
@@ -241,6 +319,23 @@ class TraceView(object):
 
         """
         return self._layers.get(app, *args, **kwargs)
+
+    def licenses(self):
+        """ Get the current number of hosts reporting traces and the number of
+        hosts licensed to the organization.
+
+        :return: Licensing information for organization.
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.licenses()
+          {u'hosts_used': 5, u'hosts_limit': 10}
+
+        """
+        return self._licenses.get()
 
     def metrics(self):
         """ Get all available host metrics that have been collected.
@@ -304,7 +399,7 @@ class TraceView(object):
 
           >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.organization.users()
+          >>> tv.users()
           [{u'admin': True, u'name': u'Jane Doe', u'email': u'jdoe@example.com'}, { ... }]
 
         """

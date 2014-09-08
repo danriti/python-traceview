@@ -20,3 +20,7 @@ class Organization(Resource):
 class User(Resource):
 
     PATH = "organization/users"
+
+class Licenses(Resource):
+
+    PATH = "organization/licenses"
