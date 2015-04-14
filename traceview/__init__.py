@@ -270,8 +270,7 @@ class TraceView(object):
           >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.hosts()
-          [u'db.example.com', u'api.example.com', u'www.example.com', u'mail.example.com']
-
+          [{u'last_trace': None, u'last_heartbeat': 1429033545, u'first_heartbeat': 1428060977, u'name': u'ip-127-0-0-1', u'id': 12345}, { ... }]
         """
         return self._hosts.get(app=appname)
 
