@@ -19,6 +19,9 @@ import traceview.resource
 
 TV_API_KEY = os.environ.get("TV_API_KEY", None)
 
+# The total_requests API requires a non-default app to measure
+TV_REQUESTS_APP = os.environ.get("TV_REQUESTS_APP", None)
+
 
 ################################################################################
 # API Tests
@@ -133,6 +136,22 @@ class TestErrors(unittest.TestCase):
         self.assertNotEqual(error_rates, None)
         self.assertIsInstance(error_rates, dict)
         self.assertTrue('items' in error_rates)
+
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_REQUESTS_APP is None, "TV_REQUESTS_APP must define a valid (non-Default) app in order to test the total_requests API.")
+class TestTotalRequests(unittest.TestCase):
+
+    def setUp(self):
+        self.tv = traceview.TraceView(TV_API_KEY)
+
+    def test_error_rates(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        total_requests = self.tv.total_requests(TV_REQUESTS_APP)
+        self.assertNotEqual(total_requests, None)
+        self.assertIsInstance(total_requests, dict)
+        self.assertTrue('items' in total_requests)
 
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
