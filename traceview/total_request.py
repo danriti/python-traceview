@@ -24,4 +24,3 @@ class Requests(Resource):
         """
         self.path = self.PATH.format(app=app)
         return super(Requests, self).get(*args, **kwargs)
-

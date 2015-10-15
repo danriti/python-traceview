@@ -275,7 +275,7 @@ class TraceView(object):
 
           >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.total_requests('Default')
+          >>> tv.total_requests('APP NAME HERE')
           {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
 
         """
