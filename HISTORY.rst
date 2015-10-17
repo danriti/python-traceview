@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.5.0 (2015-10-16)
+++++++++++++++++++
+
+- Add support for total requests (thanks Matt Coddington!)
+- Python 3.5 now supported
+
 0.4.0 (2014-09-08)
 ++++++++++++++++++
 
