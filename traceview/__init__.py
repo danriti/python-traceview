@@ -22,6 +22,7 @@ from .host import Host, Instrumentation
 from .error import Rate
 from .latency import Client, Server
 from .organization import Organization, User, Licenses
+from .total_request import Requests
 
 
 class TraceView(object):
@@ -57,6 +58,7 @@ class TraceView(object):
         self._organization = Organization(self.api_key)
         self._regions = Region(self.api_key)
         self._users = User(self.api_key)
+        self._total_requests = Requests(self.api_key)
 
         #: Get :py:class:`Client <traceview.latency.Client>` latency information.
         self.client = Client(self.api_key)
@@ -257,6 +259,27 @@ class TraceView(object):
 
         """
         return self._error_rates.get(app, *args, **kwargs)
+
+    def total_requests(self, app, *args, **kwargs):
+        """ Get the total requests for an application.
+
+        Each item in the items list is a pair of values (timestamp,
+        total_requests).  total_requests is the number of requests to
+        your application during that time period.
+
+        :param str app: The application name.
+        :return: timeseries data of the application's total requests
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.total_requests('APP NAME HERE')
+          {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
+
+        """
+        return self._total_requests.get(app, *args, **kwargs)
 
     def hosts(self, appname=None, *args, **kwargs):
         """ Get all hosts that have been traced.
