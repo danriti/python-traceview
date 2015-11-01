@@ -21,7 +21,7 @@ from .discovery import Action, App, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
 from .host import Host, Instrumentation
 from .error import Rate
-#from .latency import Client, Server
+from .latency import Client, Server
 from .organization import Organization
 from .total_request import TotalRequests
 
@@ -58,11 +58,11 @@ class TraceView(object):
         self._organization = Organization(self._api)
         self._regions = Region(self._api)
 
-        # #: Get :py:class:`Client <traceview.latency.Client>` latency information.
-        # self.client = Client(self.api_key)
-        # #: Get :py:class:`Server <traceview.latency.Server>` latency information.
-        # self.server = Server(self.api_key)
-        #: Get :py:class:`Requests <traceview.total_request.Requests>` information.
+        #: Get :py:class:`Client <traceview.latency.Client>` latency information.
+        self.client = Client(self._api)
+        #: Get :py:class:`Server <traceview.latency.Server>` latency information.
+        self.server = Server(self._api)
+        #: Get :py:class:`TotalRequests <traceview.total_request.TotalRequests>` information.
         self.total_requests = TotalRequests(self._api)
 
 
