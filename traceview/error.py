@@ -14,13 +14,6 @@ from .resource import Resource
 
 class Rate(Resource):
 
-    PATH = "errors/{app}/rate"
-
     def get(self, app, *args, **kwargs):
-        """ Overloaded get method.
-
-        :param app: The application name.
-
-        """
-        self.path = self.PATH.format(app=app)
-        return super(Rate, self).get(*args, **kwargs)
+        path = 'errors/{app}/rate'.format(app=app)
+        return self.api.get(path)

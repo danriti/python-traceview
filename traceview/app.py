@@ -14,4 +14,7 @@ from .resource import Resource
 
 class Assign(Resource):
 
-    PATH = "assign_app"
+    def update(self, hostname, app, *args, **kwargs):
+        kwargs['hostname'] = hostname
+        kwargs['appname'] = app
+        return self.api.post('assign_app', *args, **kwargs)
