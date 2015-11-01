@@ -14,13 +14,11 @@ from .resource import Resource
 
 class Organization(Resource):
 
-    PATH = "organization"
+    def get(self):
+        return self.api.get('organization')
 
+    def users(self):
+        return self.api.get('organization/users')
 
-class User(Resource):
-
-    PATH = "organization/users"
-
-class Licenses(Resource):
-
-    PATH = "organization/licenses"
+    def licenses(self):
+        return self.api.get('organization/licenses')

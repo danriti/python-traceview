@@ -12,15 +12,22 @@ http://dev.appneta.com/docs/api-v2/total_requests.html
 from .resource import Resource
 
 
-class Requests(Resource):
+class TotalRequests(Resource):
 
-    PATH = "total_requests/{app}/series"
-
-    def get(self, app, *args, **kwargs):
-        """ Overloaded get method
+    def series(self, app, *args, **kwargs):
+        """ Get a timeseries of the applications total requests.
 
         :param app: The application name.
 
         """
-        self.path = self.PATH.format(app=app)
-        return super(Requests, self).get(*args, **kwargs)
+        path = 'total_requests/{app}/series'.format(app=app)
+        return self.api.get(path, *args, **kwargs)
+
+    def summary(self, app, *args, **kwargs):
+        """ Get a summary of the applications total requests.
+
+        :param app: The application name.
+
+        """
+        path = 'total_requests/{app}/summary'.format(app=app)
+        return self.api.get(path, *args, **kwargs)
