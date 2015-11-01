@@ -49,13 +49,13 @@ class Api(object):
         """
         return self._request(method='post', path=path, *args, **kwargs)
 
-    def delete(self, *args, **kwargs):
+    def delete(self, path, *args, **kwargs):
         """ Perform a HTTP DELETE request.
 
         :param dict kwargs: (optional) Query paramters for the request.
 
         """
-        return self._request(method='delete', *args, **kwargs)
+        return self._request(method='delete', path=path, *args, **kwargs)
 
     def _request(self, method, path, *args, **kwargs):
         """ Perform a HTTP request.
