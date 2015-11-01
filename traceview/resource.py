@@ -22,6 +22,17 @@ class Resource(object):
 
     """
 
+    def __init__(self, api):
+        self.api = api
+
+
+class DeprecatedResource(object):
+    """ The :class:`Resource <Resource>` object.
+
+    Acts as a base class for TraceView API resources.
+
+    """
+
     AUTHORITY = "https://api.tv.appneta.com"
     VERSION = "api-v2"
     PATH = None
