@@ -15,7 +15,6 @@ import requests
 
 import traceview
 import traceview.api
-import traceview.resource
 
 
 TV_API_KEY = os.environ.get('TV_API_KEY', None)
@@ -145,11 +144,20 @@ class TestTotalRequests(unittest.TestCase):
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_error_rates(self):
+    def test_total_requests(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
         total_requests = self.tv.total_requests(TV_APP_NAME)
+        self.assertNotEqual(total_requests, None)
+        self.assertIsInstance(total_requests, dict)
+        self.assertIn('items', total_requests)
+
+    def test_total_requests_series(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        total_requests = self.tv.total_requests.series(TV_APP_NAME)
         self.assertNotEqual(total_requests, None)
         self.assertIsInstance(total_requests, dict)
         self.assertIn('items', total_requests)
