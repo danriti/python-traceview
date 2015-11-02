@@ -23,7 +23,7 @@ def tuplify(results, class_name='Result'):
 def _tuplify_timeseries(results, class_name):
     tuple_name = '{name}Tuple'.format(name=class_name)
     nt = namedtuple(tuple_name, results['fields'])
-    return map(nt._make, results['items'])
+    return [nt(*item) for item in results['items']]
 
 
 def _tuplify_dict(results, class_name):
