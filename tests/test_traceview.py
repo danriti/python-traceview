@@ -18,17 +18,17 @@ import traceview.api
 import traceview.resource
 
 
-TV_API_KEY = os.environ.get("TV_API_KEY", None)
+TV_API_KEY = os.environ.get('TV_API_KEY', None)
 
 # The total_requests API requires a non-default app to measure
-TV_APP_NAME = os.environ.get("TV_APP_NAME", None)
+TV_APP_NAME = os.environ.get('TV_APP_NAME', None)
 
 
 ################################################################################
 # API Tests
 ################################################################################
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestOrganization(unittest.TestCase):
 
     def setUp(self):
@@ -53,7 +53,7 @@ class TestOrganization(unittest.TestCase):
         self.assertTrue('hosts_used' in licenses)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestDiscovery(unittest.TestCase):
 
     def setUp(self):
@@ -123,7 +123,7 @@ class TestDiscovery(unittest.TestCase):
         self.assertTrue(len(regions) > 0)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestErrors(unittest.TestCase):
 
     def setUp(self):
@@ -138,8 +138,8 @@ class TestErrors(unittest.TestCase):
         self.assertIsInstance(error_rates, dict)
         self.assertTrue('items' in error_rates)
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
-@unittest.skipIf(TV_APP_NAME is None, "TV_APP_NAME must define a valid (non-Default) app in order to test the total_requests API.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
+@unittest.skipIf(TV_APP_NAME is None, 'TV_APP_NAME must define a valid (non-Default) app in order to test the total_requests API.')
 class TestTotalRequests(unittest.TestCase):
 
     def setUp(self):
@@ -155,7 +155,7 @@ class TestTotalRequests(unittest.TestCase):
         self.assertIn('items', total_requests)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestLatency(unittest.TestCase):
 
     def setUp(self):
@@ -207,7 +207,7 @@ class TestLatency(unittest.TestCase):
         self.assertTrue(len(server_by_layer) > 0)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestAnnotation(unittest.TestCase):
 
     def setUp(self):
@@ -217,7 +217,7 @@ class TestAnnotation(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        results = self.tv.annotation("test annotation", username="dan")
+        results = self.tv.annotation('test annotation', username='dan')
         self.assertEqual(results, None)
 
     def test_annotations(self):
@@ -241,7 +241,7 @@ class TestAnnotation(unittest.TestCase):
         self.assertTrue('message' in results[0])
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestHost(unittest.TestCase):
 
     def setUp(self):
@@ -255,7 +255,7 @@ class TestHost(unittest.TestCase):
         self.assertTrue(len(hosts) > 0)
 
     def test_hosts_by_app(self):
-        hosts = self.tv.hosts(appname="Default")
+        hosts = self.tv.hosts(appname='Default')
         self.assertNotEqual(hosts, None)
         self.assertIsInstance(hosts, list)
         self.assertTrue(len(hosts) > 0)
@@ -268,7 +268,7 @@ class TestHost(unittest.TestCase):
         self.assertIsInstance(versions[0], dict)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestAssign(unittest.TestCase):
 
     def setUp(self):
@@ -324,14 +324,14 @@ class TestApi(unittest.TestCase):
     api = None
 
     def setUp(self):
-        self.api = traceview.api.Api("ABC123")
+        self.api = traceview.api.Api('ABC123')
 
     def test_build_query_params(self):
-        actual = self.api._build_query_params({"foo":"bar", "lol":5})
+        actual = self.api._build_query_params({'foo':'bar', 'lol':5})
         expected = {
-            "key": "ABC123",
-            "foo": "bar",
-            "lol": 5
+            'key': 'ABC123',
+            'foo': 'bar',
+            'lol': 5
         }
         self.assertEqual(actual, expected)
 
@@ -343,7 +343,7 @@ class TestApi(unittest.TestCase):
     def test_build_query_params_no_args(self):
         actual = self.api._build_query_params()
         expected = {
-            "key": "ABC123"
+            'key': 'ABC123'
         }
         self.assertEqual(actual, expected)
 
