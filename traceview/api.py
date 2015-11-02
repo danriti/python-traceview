@@ -30,8 +30,9 @@ class Api(object):
         'delete'
     ]
 
-    def __init__(self, api_key):
+    def __init__(self, api_key, after_request=None):
         self._api_key = api_key
+        self._after_request = after_request
 
     def get(self, path, *args, **kwargs):
         """ Perform a HTTP GET request.
@@ -79,7 +80,10 @@ class Api(object):
         if response.status_code != requests.codes.ok: # pylint: disable-msg=E1101
             raise requests.HTTPError(response.status_code, url, response.text)
 
-        return response.json()['data']
+        results = response.json()['data']
+        if self._after_request:
+            return self._after_request(results)
+        return results
 
     def _url(self, path):
         return "{0}/{1}/{2}".format(self.AUTHORITY, self.VERSION, path)
