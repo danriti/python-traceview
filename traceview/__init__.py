@@ -40,8 +40,8 @@ class TraceView(object):
 
     """
 
-    def __init__(self, api_key):
-        self._api = Api(api_key)
+    def __init__(self, api_key, formatter=None):
+        self._api = Api(api_key, after_request=formatter)
 
         self._actions = Action(self._api)
         self._annotation = Annotation(self._api)
