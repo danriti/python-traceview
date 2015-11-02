@@ -31,7 +31,7 @@ class Api(object):
     ]
 
     def __init__(self, api_key):
-        self.api_key = api_key
+        self._api_key = api_key
 
     def get(self, path, *args, **kwargs):
         """ Perform a HTTP GET request.
@@ -92,5 +92,5 @@ class Api(object):
         """
         if not isinstance(params, dict):
             params = {}
-        params.update({"key": self.api_key})
+        params.update({"key": self._api_key})
         return params

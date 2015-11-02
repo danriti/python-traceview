@@ -14,6 +14,7 @@ from httmock import all_requests, response, with_httmock
 import requests
 
 import traceview
+import traceview.api
 import traceview.resource
 
 
@@ -282,7 +283,7 @@ class TestAssign(unittest.TestCase):
 
 
 ################################################################################
-# Mocks
+# HTTP Mocks
 ################################################################################
 
 @all_requests
@@ -318,15 +319,15 @@ class TestTraceView(unittest.TestCase):
         self.assertIsInstance(tv, traceview.TraceView)
 
 
-class TestResource(unittest.TestCase):
+class TestApi(unittest.TestCase):
 
-    def test_initialize(self):
-        r = traceview.resource.Resource(None)
-        self.assertIsInstance(r, traceview.resource.Resource)
+    api = None
+
+    def setUp(self):
+        self.api = traceview.api.Api("ABC123")
 
     def test_build_query_params(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params({"foo":"bar", "lol":5})
+        actual = self.api._build_query_params({"foo":"bar", "lol":5})
         expected = {
             "key": "ABC123",
             "foo": "bar",
@@ -335,65 +336,43 @@ class TestResource(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_build_query_params_bad_args(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params([])
+        actual = self.api._build_query_params([])
         self.assertNotEqual(actual, None)
         self.assertIsInstance(actual, dict)
 
     def test_build_query_params_no_args(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params()
+        actual = self.api._build_query_params()
         expected = {
             "key": "ABC123"
         }
         self.assertEqual(actual, expected)
 
-    def test_uri(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        self.assertEqual(r.uri, "https://api.tv.appneta.com/api-v2/lol")
+    def test_url(self):
+        self.assertEqual(self.api._url('lol'),
+                         'https://api.tv.appneta.com/api-v2/lol')
 
     @with_httmock(traceview_api_mock)
     def test_request_get(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.get()
+        results = self.api.get('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock)
     def test_request_post(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.post()
+        results = self.api.post('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock)
     def test_request_delete(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.delete()
+        results = self.api.delete('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock_forbidden)
     def test_request_forbidden(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
         with self.assertRaises(requests.HTTPError):
-            r.get()
-
-    def test_request_unsupported_method(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        with self.assertRaises(requests.HTTPError):
-            r.request('put')
-
-    def test_request_no_path(self):
-        r = traceview.resource.Resource("ABC123")
-        with self.assertRaises(requests.URLRequired):
-            r.request('get')
+            self.api.get('lol')
 
 
 if __name__ == '__main__':
