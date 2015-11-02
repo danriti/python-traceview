@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-traceview.resources
+traceview.resource
 
 This module contains the objects associated with API resources.
 
