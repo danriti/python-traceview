@@ -17,9 +17,7 @@ class Action(Resource):
     PATH = "actions"
 
 
-class App(Resource):
-
-    PATH = "apps"
+# for App class, see app.py
 
 
 class Browser(Resource):
