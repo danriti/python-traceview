@@ -207,7 +207,7 @@ class TraceView(object):
         return self._controllers.get()
 
     def delete(self, host_id, *args, **kwargs):
-        """ **Deprecated:** please use delete_host or delete_app.
+        """ **DEPRECATED:** please use delete_host instead.
 
         Delete an existing host.
 
@@ -228,7 +228,7 @@ class TraceView(object):
     def delete_host(self, host_id, *args, **kwargs):
         """ Delete an existing host.
 
-        :param str host_id: The id of the host to delete.
+        :param int host_id: The id of the host to delete.
         :return: indicates if host was successfully deleted.
         :rtype: boolean
 
@@ -236,7 +236,7 @@ class TraceView(object):
 
           >>> usage import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.delete_host(host_id='123')
+          >>> tv.delete_host(host_id=123)
           True
 
         """
