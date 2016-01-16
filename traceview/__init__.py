@@ -9,7 +9,7 @@ TraceView API library
 """
 
 __title__ = 'traceview'
-__version__ = '0.5.0'
+__version__ = '0.6.0'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
@@ -217,7 +217,7 @@ class TraceView(object):
 
         Usage::
 
-          >>> usage import traceview
+          >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.delete(host_id='123')
           True
@@ -234,7 +234,7 @@ class TraceView(object):
 
         Usage::
 
-          >>> usage import traceview
+          >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.delete_host(host_id=123)
           True
@@ -251,7 +251,7 @@ class TraceView(object):
 
         Usage::
 
-          >>> usage import traceview
+          >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.delete_app(app_name='APP_123')
           True
