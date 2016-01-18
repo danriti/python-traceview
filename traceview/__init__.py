@@ -9,7 +9,7 @@ TraceView API library
 """
 
 __title__ = 'traceview'
-__version__ = '0.6.4'
+__version__ = '0.6.5'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
