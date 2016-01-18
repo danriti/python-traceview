@@ -11,3 +11,9 @@ install:
   - "pip install -r requirements.txt"
 # command to run tests
 script: nosetests
+deploy:
+  - provider: pypi
+    user: "Dan.Riti"
+    password:
+      secure: H8LajeriIeKVtFVLZ89UfPEUEAYiI0k/sXVG2VT6zGx2V4KTOLZwWQTAgTUhX+Wx6zacOZh6jRbT9IX5kYYzCpr/Z/K2OZgoycR+dVAulmQrmlqBUQr63Wxd7Perjn24rkdcqRuWYqOTnNWourtiCCOOfEJFK4tYGD//w9TcrZk=
+    server: https://testpypi.python.org/pypi
