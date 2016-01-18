@@ -29,7 +29,7 @@ deploy:
     distributions: sdist
     user: "Dan.Riti"
     password:
-      secure: "IEsQdc5lq6swLIqchjW67f/gVDm02Vc6MJgQUSe9oQm0hcuc0LG+HqDkiZ4bMBFv9C6Z+2M/ULQUTGr9Up7BDEhYtHLjt4j9pLMNZo/R7OUOioOtuiBobUXT9f+13ag2BfGPfYDs8FG/F6l1Pl6rmIjHOWJsRSULRACxuuBwFtI="
+      secure: "H8LajeriIeKVtFVLZ89UfPEUEAYiI0k/sXVG2VT6zGx2V4KTOLZwWQTAgTUhX+Wx6zacOZh6jRbT9IX5kYYzCpr/Z/K2OZgoycR+dVAulmQrmlqBUQr63Wxd7Perjn24rkdcqRuWYqOTnNWourtiCCOOfEJFK4tYGD//w9TcrZk="
     on:
       branch: master
       tags: true
