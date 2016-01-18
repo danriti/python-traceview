@@ -12,6 +12,7 @@ install:
 # command to run tests
 script: nosetests
 deploy:
+    # test pypi
   - provider: pypi
     distributions: sdist
     server: https://testpypi.python.org/pypi
@@ -20,4 +21,14 @@ deploy:
       secure: "H8LajeriIeKVtFVLZ89UfPEUEAYiI0k/sXVG2VT6zGx2V4KTOLZwWQTAgTUhX+Wx6zacOZh6jRbT9IX5kYYzCpr/Z/K2OZgoycR+dVAulmQrmlqBUQr63Wxd7Perjn24rkdcqRuWYqOTnNWourtiCCOOfEJFK4tYGD//w9TcrZk="
     on:
       branch: master
+      condition: $TRAVIS_PYTHON_VERSION = "2.7"
+
+    # production pypi
+  - provider: pypi
+    distributions: sdist
+    user: "Dan.Riti"
+    password:
+      secure: "ECJYVsW0SZINvKqCgF6JAxeHliPzGa+sfsY38qT+jTt6agGx/kF8WHAjJ4j7jbe0/5DlVo34Ij08a8UpyIT8IymrEigPVDU0H0mFFIW9ieyzS9OQIioe24ooytTMkNrCn/Dw8OVIolzHCyldBoypMWviqknM/bBrpm+PmJ7VM+8="
+    on:
+      tags: true
       condition: $TRAVIS_PYTHON_VERSION = "2.7"
