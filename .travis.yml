@@ -17,3 +17,5 @@ deploy:
     password:
       secure: "H8LajeriIeKVtFVLZ89UfPEUEAYiI0k/sXVG2VT6zGx2V4KTOLZwWQTAgTUhX+Wx6zacOZh6jRbT9IX5kYYzCpr/Z/K2OZgoycR+dVAulmQrmlqBUQr63Wxd7Perjn24rkdcqRuWYqOTnNWourtiCCOOfEJFK4tYGD//w9TcrZk="
     server: https://testpypi.python.org/pypi
+    on:
+      branch: master
