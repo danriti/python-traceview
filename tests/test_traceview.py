@@ -276,19 +276,29 @@ class TestHost(unittest.TestCase):
         self.assertIsInstance(versions[0], dict)
 
 
-@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
-class TestAssign(unittest.TestCase):
+@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+class TestApp(unittest.TestCase):
 
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_assign(self):
+    def test_app_assign(self):
         apps = [app for app in self.tv.apps() if app != 'Default']
         self.assertTrue(len(apps) > 0)
 
         results = self.tv.assign(appname=apps[0], hostname='test.example.com')
         self.assertEqual(results, None)
 
+    def test_app_delete(self):
+        TEST_APP_NAME = 'TEST_APP_ABC123'
+
+        apps = [app for app in self.tv.apps() if app == TEST_APP_NAME]
+        self.assertTrue(len(apps) == 0) # ensure we don't have an app with this name
+
+        results = self.tv.assign(appname=TEST_APP_NAME, hostname='test.example.com', create=True, layer="test")
+
+        results = self.tv.delete_app(app_name=TEST_APP_NAME)
+        self.assertEqual(results, True)
 
 ################################################################################
 # HTTP Mocks

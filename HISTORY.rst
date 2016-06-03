@@ -3,6 +3,11 @@
 Release History
 ---------------
 
+0.6.0 (2016-01-16)
+++++++++++++++++++
+
+- Add support for deleting apps (thanks Dan Kuebrich!)
+
 0.5.0 (2015-10-16)
 ++++++++++++++++++
 

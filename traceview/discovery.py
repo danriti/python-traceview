@@ -18,12 +18,6 @@ class Action(Resource):
         return self.api.get('actions')
 
 
-class App(Resource):
-
-    def get(self):
-        return self.api.get('apps')
-
-
 class Browser(Resource):
 
     def get(self):

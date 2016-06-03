@@ -9,15 +9,15 @@ TraceView API library
 """
 
 __title__ = 'traceview'
-__version__ = '0.5.0'
+__version__ = '0.6.8'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
 from .annotation import Annotation
 from .api import Api
-from .app import Assign
-from .discovery import Action, App, Browser, Controller, Domain
+from .app import App, Assign
+from .discovery import Action, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
 from .host import Host, Instrumentation
 from .error import Rate
@@ -205,7 +205,9 @@ class TraceView(object):
         return self._controllers.get()
 
     def delete(self, host_id, *args, **kwargs):
-        """ Delete an existing host.
+        """ **DEPRECATED:** please use delete_host instead.
+
+        Delete an existing host.
 
         :param str host_id: The id of the host to delete.
         :return: indicates if host was successfully deleted.
@@ -213,13 +215,47 @@ class TraceView(object):
 
         Usage::
 
-          >>> usage import traceview
+          >>> import traceview
           >>> tv = traceview.TraceView('API KEY HERE')
           >>> tv.delete(host_id='123')
           True
 
         """
-        return self._hosts.delete(host_id)
+        return self.delete_host(host_id, *args, **kwargs)
+
+    def delete_host(self, host_id, *args, **kwargs):
+        """ Delete an existing host.
+
+        :param int host_id: The id of the host to delete.
+        :return: indicates if host was successfully deleted.
+        :rtype: boolean
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.delete_host(host_id=123)
+          True
+
+        """
+        return self._hosts.delete(host_id, *args, **kwargs)
+
+    def delete_app(self, app_name, *args, **kwargs):
+        """ Delete an existing app.
+
+        :param str app_name: The name of the app to delete.
+        :return: indicates if app was successfully deleted.
+        :rtype: boolean
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.delete_app(app_name='APP_123')
+          True
+
+        """
+        return self._apps.delete(app_name, *args, **kwargs)
 
     def domains(self):
         """ Get all domains that have been traced.

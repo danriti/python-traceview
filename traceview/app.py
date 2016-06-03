@@ -18,3 +18,13 @@ class Assign(Resource):
         kwargs['hostname'] = hostname
         kwargs['appname'] = app
         return self.api.post('assign_app', *args, **kwargs)
+
+
+class App(Resource):
+
+    def get(self):
+        return self.api.get('apps')
+
+    def delete(self, app_name, *args, **kwargs):
+        path = 'app/{app_name}'.format(app_name=app_name)
+        return self.api.delete(path)
