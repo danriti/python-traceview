@@ -68,9 +68,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
 
     keywords='traceview api client development performance',
@@ -80,7 +80,7 @@ setup(
     ],
 
     install_requires=[
-        'requests == 2.2.1'
+        'requests == 2.10.0'
     ],
 
     package_data={'': ['README.rst']},

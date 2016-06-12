@@ -64,10 +64,9 @@ class TestDiscovery(unittest.TestCase):
         self.assertIsInstance(apps, list)
         self.assertTrue(len(apps) > 0)
 
+    @unittest.skipIf(TV_APP_NAME is None, "TV_APP_NAME must define a valid (non-Default) app in order to test the layers API.")
     def test_layers(self):
-        apps = self.tv.apps()
-        self.assertTrue(len(apps) > 0)
-        layers = self.tv.layers(apps[0])
+        layers = self.tv.layers(TV_APP_NAME)
         self.assertNotEqual(layers, None)
         self.assertIsInstance(layers, list)
         self.assertTrue(len(layers) > 0)
