@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.7.0 (2016-06-12)
+++++++++++++++++++
+
+- Update requests library to version 2.10.0
+- Drop support for Python 3.2
+
 0.6.0 (2016-01-16)
 ++++++++++++++++++
 
