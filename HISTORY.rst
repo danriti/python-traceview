@@ -6,8 +6,8 @@ Release History
 0.7.0 (2016-06-12)
 ++++++++++++++++++
 
+- Update requests library to version 2.10.0
 - Drop support for Python 3.2
-- Update required version of requests library
 
 0.6.0 (2016-01-16)
 ++++++++++++++++++
