@@ -14,6 +14,16 @@ from .resource import Resource
 
 class TotalRequests(Resource):
 
+    def __call__(self, *args, **kwargs):
+        """ In previous versions of this library, there used to be a
+        `total_requests` method on the `TraceView` object. Thus, this is
+        implemented to maintain backwards compatibility.
+
+        All new callers should use the methods defined.
+
+        """
+        return self.series(*args, **kwargs)
+
     def series(self, app, *args, **kwargs):
         """ Get a timeseries of the applications total requests.
 

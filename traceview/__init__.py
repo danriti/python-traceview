@@ -3,13 +3,13 @@
 """
 TraceView API library
 
-:copyright: (c) 2014 by Daniel Riti.
+:copyright: (c) 2016 by Daniel Riti.
 :license: MIT, see LICENSE for more details.
 
 """
 
 __title__ = 'traceview'
-__version__ = '0.6.9'
+__version__ = '0.7.0'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
@@ -293,27 +293,6 @@ class TraceView(object):
 
         """
         return self._error_rates.get(app, *args, **kwargs)
-
-    # def total_requests(self, app, *args, **kwargs):
-    #     """ Get the total requests for an application.
-
-    #     Each item in the items list is a pair of values (timestamp,
-    #     total_requests).  total_requests is the number of requests to
-    #     your application during that time period.
-
-    #     :param str app: The application name.
-    #     :return: timeseries data of the application's total requests
-    #     :rtype: dict
-
-    #     Usage::
-
-    #       >>> import traceview
-    #       >>> tv = traceview.TraceView('API KEY HERE')
-    #       >>> tv.total_requests('APP NAME HERE')
-    #       {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
-
-    #     """
-    #     return self._total_requests.get(app, *args, **kwargs)
 
     def hosts(self, appname=None, *args, **kwargs):
         """ Get all hosts that have been traced.
