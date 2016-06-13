@@ -32,6 +32,7 @@ class TraceView(object):
     Provides access to TraceView API resources.
 
     :param api_key: The TraceView API access key.
+    :param func formatter: (optional) Function to format the api results. See the module :mod:`traceview.formatters`.
 
     Usage::
 

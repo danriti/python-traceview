@@ -43,9 +43,24 @@ class TotalRequests(Resource):
         return self.series(*args, **kwargs)
 
     def series(self, app, *args, **kwargs):
-        """ Get a timeseries of the applications total requests.
+        """ Get the total requests for an application.
 
-        :param app: The application name.
+        Each item in the items list is a pair of values (timestamp,
+        total_requests).  total_requests is the number of requests to
+        your application during that time period.
+
+        :param str app: The application name.
+        :param str time_window: (optional) The time window ('hour', 'day', or 'week') to filter on.
+        :param str time_end: (optional) The end time for the time window.
+        :return: timeseries data of the application's total requests
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.total_requests.series('APP NAME HERE')
+          {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
 
         """
         path = 'total_requests/{app}/series'.format(app=app)
@@ -55,6 +70,17 @@ class TotalRequests(Resource):
         """ Get a summary of the applications total requests.
 
         :param app: The application name.
+        :param str time_window: (optional) The time window ('hour', 'day', or 'week') to filter on.
+        :param str time_end: (optional) The end time for the time window.
+        :return: summary of the application's total requests
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.total_requests.summary('APP NAME HERE')
+          {u'reqs_per_time_period': u'19.61/sec', u'total_requests': 70579.0}
 
         """
         path = 'total_requests/{app}/summary'.format(app=app)

@@ -54,3 +54,11 @@ class TestTuplifyDict(unittest.TestCase):
         actual = tuplify(self.results)
         self.assertEqual(actual.total_requests, 980)
         self.assertEqual(actual.reqs_per_time_period, '0.27/sec')
+
+
+class TestTuplifyList(unittest.TestCase):
+
+    def test_tuplify_list(self):
+        results = [u'Default', u'gif_snarfer', u'box_salmond_ca', u'heheh']
+        actual = tuplify(results)
+        self.assertEqual(actual, results)
