@@ -73,7 +73,7 @@ Latency
 Total Requests
 ~~~~~~~~~~~~~~
 
-.. autoclass:: traceview.total_requests.TotalRequests
+.. autoclass:: traceview.total_request.TotalRequests
    :members:
 
 Formatters
