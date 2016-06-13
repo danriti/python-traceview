@@ -45,17 +45,16 @@ class TestTraceViewInterface(unittest.TestCase):
 
     def test_client_interface(self):
         self.assertTrue(hasattr(self.tv, 'client'))
-
-        client = self.tv.client
-
-        self.assertMethodExists(client, 'latency_series')
-        self.assertMethodExists(client, 'latency_summary')
+        self.assertMethodExists(self.tv.client, 'latency_series')
+        self.assertMethodExists(self.tv.client, 'latency_summary')
 
     def test_server_interface(self):
         self.assertTrue(hasattr(self.tv, 'server'))
+        self.assertMethodExists(self.tv.server, 'latency_by_layer')
+        self.assertMethodExists(self.tv.server, 'latency_series')
+        self.assertMethodExists(self.tv.server, 'latency_summary')
 
-        server = self.tv.server
-
-        self.assertMethodExists(server, 'latency_by_layer')
-        self.assertMethodExists(server, 'latency_series')
-        self.assertMethodExists(server, 'latency_summary')
+    def test_total_requests_interface(self):
+        self.assertTrue(hasattr(self.tv, 'total_requests'))
+        self.assertMethodExists(self.tv.total_requests, 'series')
+        self.assertMethodExists(self.tv.total_requests, 'summary')
