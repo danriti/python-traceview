@@ -6,7 +6,7 @@ Release History
 0.7.0 (2016-06-12)
 ++++++++++++++++++
 
-- Add support for formatting TraceView api results
+- Add support for formatting TraceView API results
 - Add support for total requests summary
 - Refactor internal design of library
 - Update requests library to version 2.10.0
