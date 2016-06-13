@@ -392,5 +392,22 @@ class TestApi(unittest.TestCase):
             self.api.get('lol')
 
 
+def after_request(results):
+    return 2
+
+
+class TestApiHooks(unittest.TestCase):
+
+    api = None
+
+    def setUp(self):
+        self.api = traceview.api.Api('ABC123', after_request)
+
+    @with_httmock(traceview_api_mock)
+    def test_after_request_hook(self):
+        results = self.api.get('lol')
+        self.assertEquals(results, 2)
+
+
 if __name__ == '__main__':
     unittest.main()
