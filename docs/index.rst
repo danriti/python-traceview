@@ -69,3 +69,15 @@ Latency
    :members:
 .. autoclass:: traceview.latency.Server
    :members:
+
+Total Requests
+~~~~~~~~~~~~~~
+
+.. autoclass:: traceview.total_requests.TotalRequests
+   :members:
+
+Formatters
+~~~~~~~~~~
+
+.. automodule:: traceview.formatters
+   :members: tuplify
