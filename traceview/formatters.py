@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-traceview.formatters
+:mod:`traceview.formatters`
 
 This module contains functions used to format TraceView API results.
 
