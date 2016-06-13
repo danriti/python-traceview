@@ -15,13 +15,11 @@ def identity(results):
 
 
 def tuplify(results, class_name='Result'):
-    """ Format API results into `namedtuple`.
-
-    Formats API results into `namedtuple`s. Supports tuplifying results that
-    are either timeseries data or objects (dicts).
+    """ Formats API results into :class:`namedtuple` objects. Supports
+    tuplifying results that are either timeseries data or objects (dicts).
 
     :param results: TraceView API results.
-    :param str class_name: (optional) Prefix string for naming of the namedtuple.
+    :param str class_name: (optional) Prefix string for name of the namedtuple.
 
     Usage::
 
@@ -35,7 +33,7 @@ def tuplify(results, class_name='Result'):
     # is timeseries data?
     if 'fields' in results and 'items' in results:
         return _tuplify_timeseries(results, class_name)
-    # is dict?
+    # is object/dict?
     if hasattr(results, 'keys'):
         return _tuplify_dict(results, class_name)
     return results
