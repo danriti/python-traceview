@@ -15,13 +15,31 @@ from .resource import Resource
 class TotalRequests(Resource):
 
     def __call__(self, *args, **kwargs):
-        """ In previous versions of this library, there used to be a
-        `total_requests` method on the `TraceView` object. Thus, this is
-        implemented to maintain backwards compatibility.
+        """
+        .. deprecated:: 0.7.0
+            Use :func:`series <traceview.total_requests.TotalRequests.series>` instead.
 
-        All new callers should use the methods defined.
+        Get the total requests for an application.
+
+        Each item in the items list is a pair of values (timestamp,
+        total_requests).  total_requests is the number of requests to
+        your application during that time period.
+
+        :param str app: The application name.
+        :return: timeseries data of the application's total requests
+        :rtype: dict
+
+        Usage::
+
+          >>> import traceview
+          >>> tv = traceview.TraceView('API KEY HERE')
+          >>> tv.total_requests('APP NAME HERE')
+          {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
 
         """
+        # In previous versions of this library, there used to be a
+        # `total_requests` method on the `TraceView` object. Thus, this is
+        # implemented to maintain backwards compatibility.
         return self.series(*args, **kwargs)
 
     def series(self, app, *args, **kwargs):

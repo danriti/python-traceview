@@ -205,7 +205,9 @@ class TraceView(object):
         return self._controllers.get()
 
     def delete(self, host_id, *args, **kwargs):
-        """ **DEPRECATED:** please use delete_host instead.
+        """
+        .. deprecated:: 0.6.0
+            Use :func:`delete_host <traceview.TraceView.delete_host>` instead.
 
         Delete an existing host.
 
