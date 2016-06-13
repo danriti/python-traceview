@@ -32,10 +32,10 @@ def tuplify(results, class_name='Result'):
       ResultTuple(reqs_per_time_period=u'19.53/sec', total_requests=70293.0)
 
     """
-    # is timeseries data
+    # is timeseries data?
     if 'fields' in results and 'items' in results:
         return _tuplify_timeseries(results, class_name)
-    # is an dict
+    # is dict?
     if hasattr(results, 'keys'):
         return _tuplify_dict(results, class_name)
     return results

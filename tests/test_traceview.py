@@ -161,6 +161,14 @@ class TestTotalRequests(unittest.TestCase):
         self.assertIsInstance(total_requests, dict)
         self.assertIn('items', total_requests)
 
+    def test_total_requests_summary(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        total_requests = self.tv.total_requests.series(TV_APP_NAME)
+        self.assertNotEqual(total_requests, None)
+        self.assertIsInstance(total_requests, dict)
+
 
 @unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestLatency(unittest.TestCase):
