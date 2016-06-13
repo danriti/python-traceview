@@ -14,20 +14,20 @@ from httmock import all_requests, response, with_httmock
 import requests
 
 import traceview
-import traceview.resource
+import traceview.api
 
 
-TV_API_KEY = os.environ.get("TV_API_KEY", None)
+TV_API_KEY = os.environ.get('TV_API_KEY', None)
 
 # The total_requests API requires a non-default app to measure
-TV_APP_NAME = os.environ.get("TV_APP_NAME", None)
+TV_APP_NAME = os.environ.get('TV_APP_NAME', None)
 
 
 ################################################################################
 # API Tests
 ################################################################################
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestOrganization(unittest.TestCase):
 
     def setUp(self):
@@ -52,7 +52,7 @@ class TestOrganization(unittest.TestCase):
         self.assertTrue('hosts_used' in licenses)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestDiscovery(unittest.TestCase):
 
     def setUp(self):
@@ -121,7 +121,7 @@ class TestDiscovery(unittest.TestCase):
         self.assertTrue(len(regions) > 0)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestErrors(unittest.TestCase):
 
     def setUp(self):
@@ -136,14 +136,14 @@ class TestErrors(unittest.TestCase):
         self.assertIsInstance(error_rates, dict)
         self.assertTrue('items' in error_rates)
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
-@unittest.skipIf(TV_APP_NAME is None, "TV_APP_NAME must define a valid (non-Default) app in order to test the total_requests API.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
+@unittest.skipIf(TV_APP_NAME is None, 'TV_APP_NAME must define a valid (non-Default) app in order to test the total_requests API.')
 class TestTotalRequests(unittest.TestCase):
 
     def setUp(self):
         self.tv = traceview.TraceView(TV_API_KEY)
 
-    def test_error_rates(self):
+    def test_total_requests(self):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
@@ -152,8 +152,25 @@ class TestTotalRequests(unittest.TestCase):
         self.assertIsInstance(total_requests, dict)
         self.assertIn('items', total_requests)
 
+    def test_total_requests_series(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+        total_requests = self.tv.total_requests.series(TV_APP_NAME)
+        self.assertNotEqual(total_requests, None)
+        self.assertIsInstance(total_requests, dict)
+        self.assertIn('items', total_requests)
+
+    def test_total_requests_summary(self):
+        apps = self.tv.apps()
+        self.assertTrue(len(apps) > 0)
+
+        total_requests = self.tv.total_requests.series(TV_APP_NAME)
+        self.assertNotEqual(total_requests, None)
+        self.assertIsInstance(total_requests, dict)
+
+
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestLatency(unittest.TestCase):
 
     def setUp(self):
@@ -205,7 +222,7 @@ class TestLatency(unittest.TestCase):
         self.assertTrue(len(server_by_layer) > 0)
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestAnnotation(unittest.TestCase):
 
     def setUp(self):
@@ -215,7 +232,7 @@ class TestAnnotation(unittest.TestCase):
         apps = self.tv.apps()
         self.assertTrue(len(apps) > 0)
 
-        results = self.tv.annotation("test annotation", username="dan")
+        results = self.tv.annotation('test annotation', username='dan')
         self.assertEqual(results, None)
 
     def test_annotations(self):
@@ -239,7 +256,7 @@ class TestAnnotation(unittest.TestCase):
         self.assertTrue('message' in results[0])
 
 
-@unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
+@unittest.skipIf(TV_API_KEY is None, 'No TraceView API Key found in environment.')
 class TestHost(unittest.TestCase):
 
     def setUp(self):
@@ -253,7 +270,7 @@ class TestHost(unittest.TestCase):
         self.assertTrue(len(hosts) > 0)
 
     def test_hosts_by_app(self):
-        hosts = self.tv.hosts(appname="Default")
+        hosts = self.tv.hosts(appname='Default')
         self.assertNotEqual(hosts, None)
         self.assertIsInstance(hosts, list)
         self.assertTrue(len(hosts) > 0)
@@ -264,6 +281,7 @@ class TestHost(unittest.TestCase):
         self.assertNotEqual(versions, None)
         self.assertIsInstance(versions, list)
         self.assertIsInstance(versions[0], dict)
+
 
 @unittest.skipIf(TV_API_KEY is None, "No TraceView API Key found in environment.")
 class TestApp(unittest.TestCase):
@@ -290,7 +308,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(results, True)
 
 ################################################################################
-# Mocks
+# HTTP Mocks
 ################################################################################
 
 @all_requests
@@ -326,82 +344,77 @@ class TestTraceView(unittest.TestCase):
         self.assertIsInstance(tv, traceview.TraceView)
 
 
-class TestResource(unittest.TestCase):
+class TestApi(unittest.TestCase):
 
-    def test_initialize(self):
-        r = traceview.resource.Resource(None)
-        self.assertIsInstance(r, traceview.resource.Resource)
+    api = None
+
+    def setUp(self):
+        self.api = traceview.api.Api('ABC123')
 
     def test_build_query_params(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params({"foo":"bar", "lol":5})
+        actual = self.api._build_query_params({'foo':'bar', 'lol':5})
         expected = {
-            "key": "ABC123",
-            "foo": "bar",
-            "lol": 5
+            'key': 'ABC123',
+            'foo': 'bar',
+            'lol': 5
         }
         self.assertEqual(actual, expected)
 
     def test_build_query_params_bad_args(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params([])
+        actual = self.api._build_query_params([])
         self.assertNotEqual(actual, None)
         self.assertIsInstance(actual, dict)
 
     def test_build_query_params_no_args(self):
-        r = traceview.resource.Resource("ABC123")
-        actual = r.build_query_params()
+        actual = self.api._build_query_params()
         expected = {
-            "key": "ABC123"
+            'key': 'ABC123'
         }
         self.assertEqual(actual, expected)
 
-    def test_uri(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        self.assertEqual(r.uri, "https://api.tv.appneta.com/api-v2/lol")
+    def test_url(self):
+        self.assertEqual(self.api._url('lol'),
+                         'https://api.tv.appneta.com/api-v2/lol')
 
     @with_httmock(traceview_api_mock)
     def test_request_get(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.get()
+        results = self.api.get('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock)
     def test_request_post(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.post()
+        results = self.api.post('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock)
     def test_request_delete(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        results = r.delete()
+        results = self.api.delete('lol')
         self.assertNotEqual(results, None)
         self.assertIsInstance(results, dict)
 
     @with_httmock(traceview_api_mock_forbidden)
     def test_request_forbidden(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
         with self.assertRaises(requests.HTTPError):
-            r.get()
+            self.api.get('lol')
 
-    def test_request_unsupported_method(self):
-        r = traceview.resource.Resource("ABC123")
-        r.path = "lol"
-        with self.assertRaises(requests.HTTPError):
-            r.request('put')
 
-    def test_request_no_path(self):
-        r = traceview.resource.Resource("ABC123")
-        with self.assertRaises(requests.URLRequired):
-            r.request('get')
+def after_request(results):
+    return 2
+
+
+class TestApiHooks(unittest.TestCase):
+
+    api = None
+
+    def setUp(self):
+        self.api = traceview.api.Api('ABC123', after_request)
+
+    @with_httmock(traceview_api_mock)
+    def test_after_request_hook(self):
+        results = self.api.get('lol')
+        self.assertEquals(results, 2)
 
 
 if __name__ == '__main__':

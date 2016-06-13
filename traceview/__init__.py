@@ -3,26 +3,27 @@
 """
 TraceView API library
 
-:copyright: (c) 2014 by Daniel Riti.
+:copyright: (c) 2016 by Daniel Riti.
 :license: MIT, see LICENSE for more details.
 
 """
 
 __title__ = 'traceview'
-__version__ = '0.6.9'
+__version__ = '0.7.0'
 __author__ = 'Daniel Riti'
 __license__ = 'MIT'
 
 
 from .annotation import Annotation
+from .api import Api
 from .app import App, Assign
 from .discovery import Action, Browser, Controller, Domain
 from .discovery import Layer, Metric, Region
 from .host import Host, Instrumentation
 from .error import Rate
 from .latency import Client, Server
-from .organization import Organization, User, Licenses
-from .total_request import Requests
+from .organization import Organization
+from .total_request import TotalRequests
 
 
 class TraceView(object):
@@ -31,6 +32,7 @@ class TraceView(object):
     Provides access to TraceView API resources.
 
     :param api_key: The TraceView API access key.
+    :param func formatter: (optional) Function to format API results. See the module :mod:`traceview.formatters`.
 
     Usage::
 
@@ -39,31 +41,31 @@ class TraceView(object):
 
     """
 
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self, api_key, formatter=None):
+        self._api = Api(api_key, after_request=formatter)
 
-        self._actions = Action(self.api_key)
-        self._annotation = Annotation(self.api_key)
-        self._apps = App(self.api_key)
-        self._assign = Assign(self.api_key)
-        self._browsers = Browser(self.api_key)
-        self._controllers = Controller(self.api_key)
-        self._domains = Domain(self.api_key)
-        self._error_rates = Rate(self.api_key)
-        self._hosts = Host(self.api_key)
-        self._instrumentation = Instrumentation(self.api_key)
-        self._layers = Layer(self.api_key)
-        self._licenses = Licenses(self.api_key)
-        self._metrics = Metric(self.api_key)
-        self._organization = Organization(self.api_key)
-        self._regions = Region(self.api_key)
-        self._users = User(self.api_key)
-        self._total_requests = Requests(self.api_key)
+        self._actions = Action(self._api)
+        self._annotation = Annotation(self._api)
+        self._apps = App(self._api)
+        self._assign = Assign(self._api)
+        self._browsers = Browser(self._api)
+        self._controllers = Controller(self._api)
+        self._domains = Domain(self._api)
+        self._error_rates = Rate(self._api)
+        self._hosts = Host(self._api)
+        self._instrumentation = Instrumentation(self._api)
+        self._layers = Layer(self._api)
+        self._metrics = Metric(self._api)
+        self._organization = Organization(self._api)
+        self._regions = Region(self._api)
 
         #: Get :py:class:`Client <traceview.latency.Client>` latency information.
-        self.client = Client(self.api_key)
+        self.client = Client(self._api)
         #: Get :py:class:`Server <traceview.latency.Server>` latency information.
-        self.server = Server(self.api_key)
+        self.server = Server(self._api)
+        #: Get :py:class:`TotalRequests <traceview.total_request.TotalRequests>` information.
+        self.total_requests = TotalRequests(self._api)
+
 
     def actions(self):
         """ Get all actions that have been traced.
@@ -102,8 +104,7 @@ class TraceView(object):
           >>> tv.annotation('Code deployed', appname='production_web')
 
         """
-        kwargs['message'] = message
-        self._annotation.post(*args, **kwargs)
+        self._annotation.create(message, *args, **kwargs)
 
     def annotations(self, appname=None, *args, **kwargs):
         """ Get annotations.
@@ -170,9 +171,7 @@ class TraceView(object):
           >>> tv.assign(hostname='web-app-1234', appname='production_web')
 
         """
-        kwargs['appname'] = appname
-        kwargs['hostname'] = hostname
-        self._assign.post(*args, **kwargs)
+        self._assign.update(hostname, appname, *args, **kwargs)
 
     def browsers(self):
         """ Get all browsers used by end users.
@@ -207,7 +206,9 @@ class TraceView(object):
         return self._controllers.get()
 
     def delete(self, host_id, *args, **kwargs):
-        """ **DEPRECATED:** please use delete_host instead.
+        """
+        .. deprecated:: 0.6.0
+            Use :func:`delete_host <traceview.TraceView.delete_host>` instead.
 
         Delete an existing host.
 
@@ -296,27 +297,6 @@ class TraceView(object):
         """
         return self._error_rates.get(app, *args, **kwargs)
 
-    def total_requests(self, app, *args, **kwargs):
-        """ Get the total requests for an application.
-
-        Each item in the items list is a pair of values (timestamp,
-        total_requests).  total_requests is the number of requests to
-        your application during that time period.
-
-        :param str app: The application name.
-        :return: timeseries data of the application's total requests
-        :rtype: dict
-
-        Usage::
-
-          >>> import traceview
-          >>> tv = traceview.TraceView('API KEY HERE')
-          >>> tv.total_requests('APP NAME HERE')
-          {u'fields': u'timestamp,total_requests', u'items': [[1444650840.0, 583.0], [1444650870.0, 591.0], ...]}
-
-        """
-        return self._total_requests.get(app, *args, **kwargs)
-
     def hosts(self, appname=None, *args, **kwargs):
         """ Get all hosts that have been traced.
 
@@ -333,7 +313,7 @@ class TraceView(object):
         """
         return self._hosts.get(app=appname)
 
-    def instrumentation(self, host_id, *args, **kwargs):
+    def instrumentation(self, host_id):
         """ Get instrumentation version information for a host.
 
         :param str host_id: The id of the host.
@@ -354,7 +334,7 @@ class TraceView(object):
           ]
 
         """
-        return self._instrumentation.get(host_id, *args, **kwargs)
+        return self._instrumentation.get(host_id)
 
     def layers(self, app, *args, **kwargs):
         """ Get all recent layers for an application.
@@ -391,7 +371,7 @@ class TraceView(object):
           {u'hosts_used': 5, u'hosts_limit': 10}
 
         """
-        return self._licenses.get()
+        return self._organization.licenses()
 
     def metrics(self):
         """ Get all available host metrics that have been collected.
@@ -459,4 +439,4 @@ class TraceView(object):
           [{u'admin': True, u'name': u'Jane Doe', u'email': u'jdoe@example.com'}, { ... }]
 
         """
-        return self._users.get()
+        return self._organization.users()
